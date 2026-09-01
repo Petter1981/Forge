@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FORGE Push REAL</title>
+<style>
+body{font-family:system-ui;background:#101827;color:#eef6ff;margin:0;padding:24px}
+main{max-width:760px;margin:auto}
+button{width:100%;padding:18px;border:0;border-radius:14px;background:#ff8500;font-weight:800;font-size:18px}
+.box{background:#192338;border:1px solid #2d3a52;border-radius:14px;padding:16px;margin:12px 0}
+.ok{color:#72e6a6} .warn{color:#ffd166}
+</style>
+</head>
+<body>
+<main>
+<h1>📣 FORGE · Push REAL</h1>
+<div class="box">Prueba HTTPS aislada de Web Push firmado.</div>
+<button id="go">Activar y probar Push REAL</button>
+<div id="msg" class="box">Pendiente.</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SB_URL='https://aezyaoyghkvvdciatnct.supabase.co';
+const SB_KEY="sb_publishable_sFBO4x6k0KhDdHUVPNdeAw_aUj6rhod";
+const sb=supabase.createClient(SB_URL,SB_KEY);
+function b64u(s){
+  const p='='.repeat((4-s.length%4)%4);
+  const b=(s+p).replace(/-/g,'+').replace(/_/g,'/');
+  const r=atob(b);
+  return Uint8Array.from([...r].map(c=>c.charCodeAt(0)));
+}
+async function call(slug,payload=null,method='POST'){
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session) throw new Error('No hay sesión Owner en este origen HTTPS. Abra primero FORGE en este mismo dominio e inicie sesión.');
+  const opt={method,headers:{Authorization:'Bearer '+session.access_token,apikey:SB_KEY,'Content-Type':'application/json'}};
+  if(payload!==null) opt.body=JSON.stringify(payload);
+  const r=await fetch(SB_URL+'/functions/v1/'+slug,opt);
+  const d=await r.json().catch(()=>({}));
+  if(!r.ok||d.ok===false) throw new Error(d.error||('HTTP '+r.status));
+  return d;
+}
+document.getElementById('go').addEventListener('click',async()=>{
+  const m=document.getElementById('msg');
+  m.textContent='Trabajando…';
+  try{
+    if(!('serviceWorker' in navigator)||!('PushManager' in window)||!('Notification' in window)) throw new Error('Este navegador no soporta Web Push.');
+    const n=await call('forge-notify',null,'GET');
+    if(!n.vapidConfigured||!n.vapidPublicKey) throw new Error('VAPID no disponible.');
+    const perm=await Notification.requestPermission();
+    if(perm!=='granted') throw new Error('Permiso de notificaciones no concedido.');
+    const reg=await navigator.serviceWorker.register('./sw-push.js');
+    await navigator.serviceWorker.ready;
+    let sub=await reg.pushManager.getSubscription();
+    if(!sub) sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64u(n.vapidPublicKey)});
+    await call('forge-notify',{action:'subscribe',subscription:sub.toJSON(),userAgent:navigator.userAgent});
+    const t=await call('forge-notify',{action:'test_push',title:'FORGE',body:'Push REAL firmado activo.',url:location.href});
+    m.innerHTML=t.sent>0?'<span class="ok">✅ PUSH REAL ENVIADO</span>':'<span class="warn">⚠️ Suscripción creada, pero el envío no confirmó entrega.</span>';
+  }catch(e){
+    m.innerHTML='<span class="warn">⚠️ '+String(e.message||e)+'</span>';
+  }
+});
+</script>
+</main>
+</body>
+</html>
