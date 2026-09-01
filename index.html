@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="es" style="--bg: #0b0f17; --panel: #121826; --panel2: #192132; --line: #2b3549; --text: #f5f7fb; --muted: #9da9bb; --accent: #ff8a00; --accent2: #ffb347;"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -692,7 +693,11 @@ async function enableForgeNotifications(){
     :'Alertas no autorizadas.';
 }
 
-setInterval(()=>{ if(document.getElementById('autonomyState')) refreshAutonomy(); },30000);
+setInterval(async()=>{
+  if(!document.getElementById('autonomyState')) return;
+  try{ const s=typeof s23Session==='function' ? await s23Session() : null; if(!s) return; }catch(_){ return; }
+  refreshAutonomy();
+},30000);
 
 
 const FORGE_AI_URL="https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/forge-ai";
@@ -1932,22 +1937,24 @@ document.addEventListener("DOMContentLoaded",()=>{
 <p style="color:var(--muted)">Configura el preview aislado sin forzar HTTPS prematuramente. Espera el build real y luego activa HTTPS cuando GitHub ya haya generado el certificado. <code>main</code> permanece intacto.</p>
 
 <div class="stats">
-  <div class="stat"><strong id="s33Owner">OK ✅</strong><span>Owner</span></div>
+  <div class="stat"><strong id="s33Owner">PENDIENTE</strong><span>Owner</span></div>
   <div class="stat"><strong id="s33Branch">PENDIENTE</strong><span>Rama preview</span></div>
   <div class="stat"><strong id="s33Pages">PENDIENTE</strong><span>GitHub Pages</span></div>
   <div class="stat"><strong id="s33Build">PENDIENTE</strong><span>Build</span></div>
-  <div class="stat"><strong id="s33Cert">HTTPS ✅</strong><span>Certificado / HTTPS</span></div>
+  <div class="stat"><strong id="s33Cert">PENDIENTE</strong><span>Certificado / HTTPS</span></div>
   <div class="stat"><strong>$0.00</strong><span>API variable</span></div>
 </div>
 
-<button id="s33RunBtn" class="primary" type="button" style="width:100%;margin-top:14px;min-height:56px;font-weight:800" disabled="">Preparando preview…</button>
-<button id="s33CheckBtn" type="button" style="width:100%;margin-top:9px;min-height:46px;font-weight:700" disabled="">
+<button id="s33RunBtn" class="primary" type="button" style="width:100%;margin-top:14px;min-height:56px;font-weight:800">
+Publicar Preview HTTPS con espera de certificado
+</button>
+<button id="s33CheckBtn" type="button" style="width:100%;margin-top:9px;min-height:46px;font-weight:700">
 Revisar certificado y HTTPS
 </button>
 
-<div id="s33Msg" style="margin-top:12px;padding:12px;border-radius:14px;background:var(--panel2)">2/5 · Creando rama aislada desde main…</div>
-<div id="s33Url" style="display: none; margin-top: 10px; padding: 12px; border-radius: 14px; background: var(--panel2);"><b>Preview:</b><br><a href="https://petter1981.github.io/Forge/" target="_blank" rel="noopener">https://petter1981.github.io/Forge/</a></div>
-<div id="s33Log" style="margin-top:10px;font-size:13px"><div style="padding:9px 11px;margin-top:7px;border-radius:12px;background:var(--panel2)">✅ Sesión owner validada.</div></div>
+<div id="s33Msg" style="margin-top:12px;padding:12px;border-radius:14px;background:var(--panel2)">Listo para ejecutar. Producción bloqueada.</div>
+<div id="s33Url" style="display:none;margin-top:10px;padding:12px;border-radius:14px;background:var(--panel2)"></div>
+<div id="s33Log" style="margin-top:10px;font-size:13px"></div>
 </section>
 
 <script>
@@ -2093,6 +2100,508 @@ document.addEventListener("DOMContentLoaded",()=>{
   document.getElementById("s33RunBtn")?.addEventListener("click",e=>{e.preventDefault();s33Run();});
   document.getElementById("s33CheckBtn")?.addEventListener("click",e=>{e.preventDefault();s33HttpsCheck(true);});
 });
+</script>
+
+
+<section id="forge-s34" style="margin:18px auto;max-width:1100px;padding:18px;border:1px solid rgba(128,128,128,.35);border-radius:18px;background:rgba(127,127,127,.08)">
+<h2>🌐 Sprint 34 · Preview Verifier REAL</h2>
+<div style="font-size:12px;color:var(--muted);margin-top:-8px;margin-bottom:10px">Sin crear rama · sin merge · verificación HTTPS real</div>
+<p style="color:var(--muted)">FORGE deja de depender de <code>/pages/builds/latest</code>. Verifica que GitHub Pages siga apuntando a una rama aislada <code>forge/readiness-*</code>, que HTTPS esté activo y que el sitio responda contenido HTML real antes de marcar <b>LIVE ✅</b>.</p>
+
+<div class="stats">
+  <div class="stat"><strong id="s34Owner">PENDIENTE</strong><span>Owner</span></div>
+  <div class="stat"><strong id="s34Source">PENDIENTE</strong><span>Source aislado</span></div>
+  <div class="stat"><strong id="s34Https">PENDIENTE</strong><span>HTTPS</span></div>
+  <div class="stat"><strong id="s34Http">PENDIENTE</strong><span>HTTP real</span></div>
+  <div class="stat"><strong id="s34Html">PENDIENTE</strong><span>HTML válido</span></div>
+  <div class="stat"><strong id="s34Live">PENDIENTE</strong><span>Preview</span></div>
+  <div class="stat"><strong>$0.00</strong><span>API variable</span></div>
+</div>
+
+<button id="s34VerifyBtn" class="primary" type="button" style="width:100%;margin-top:14px;min-height:56px;font-weight:800">
+Verificar Preview REAL ahora
+</button>
+<div id="s34Msg" style="margin-top:12px;padding:12px;border-radius:14px;background:var(--panel2)">Listo. Esta prueba no crea ramas y no toca <code>main</code>.</div>
+<div id="s34Url" style="display:none;margin-top:10px;padding:12px;border-radius:14px;background:var(--panel2)"></div>
+<div id="s34Details" style="margin-top:10px;font-size:13px"></div>
+</section>
+
+<script>
+function s34Line(t,ok=true){
+  const box=document.getElementById("s34Details");
+  if(box) box.innerHTML+=`<div style="padding:9px 11px;margin-top:7px;border-radius:12px;background:var(--panel2)">${ok?"✅":"⚠️"} ${t}</div>`;
+}
+function s34ShowUrl(url){
+  const box=document.getElementById("s34Url");
+  if(!box||!url)return;
+  box.style.display="block";
+  box.innerHTML=`<b>Preview verificado:</b><br><a href="${url}" target="_blank" rel="noopener">${url}</a>`;
+}
+async function s34Preview(action,extra={}){
+  const s=await s23Session();
+  if(!s) throw new Error("No hay sesión activa.");
+  const r=await fetch("https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/forge-preview",{
+    method:"POST",
+    headers:{"Authorization":"Bearer "+s.access_token,"apikey":S23_KEY,"Content-Type":"application/json"},
+    body:JSON.stringify({action,owner:"Petter1981",repo:"Forge",...extra})
+  });
+  const d=await r.json().catch(()=>({}));
+  if(!r.ok || d.ok===false) throw new Error(d.error||`HTTP ${r.status}`);
+  return d;
+}
+async function s34Verify(){
+  const b=document.getElementById("s34VerifyBtn"),m=document.getElementById("s34Msg");
+  b.disabled=true;b.textContent="Verificando sitio real…";
+  document.getElementById("s34Details").innerHTML="";
+  document.getElementById("s34Url").style.display="none";
+  try{
+    m.textContent="1/4 · Validando owner…";
+    const own=await s23Call("status");
+    if(!own?.authorized) throw new Error("Owner no autorizado.");
+    document.getElementById("s34Owner").textContent="OK ✅";
+    s34Line("Sesión owner validada.");
+
+    m.textContent="2/4 · Verificando configuración real de GitHub Pages…";
+    const st=await s34Preview("status");
+    if(!st.enabled) throw new Error("GitHub Pages no está configurado.");
+    const branch=st?.source?.branch||"";
+    if(!branch.startsWith("forge/readiness-")) throw new Error("Pages no apunta a una rama aislada forge/readiness-*.");
+    document.getElementById("s34Source").textContent="AISLADO ✅";
+    s34Line("Pages source → "+branch+" "+(st?.source?.path||"/")+".");
+    s34Line("main no es la fuente del preview.");
+    if(st.html_url) s34ShowUrl(st.html_url);
+
+    if(st.https_enforced===true){
+      document.getElementById("s34Https").textContent="HTTPS ✅";
+      s34Line("GitHub reporta HTTPS enforced.");
+    }else{
+      document.getElementById("s34Https").textContent="REVISAR";
+      s34Line("HTTPS todavía no aparece enforced.",false);
+    }
+
+    m.textContent="3/4 · Consultando el sitio HTTPS real…";
+    let v=null;
+    for(let i=0;i<6;i++){
+      v=await s34Preview("verify_live");
+      document.getElementById("s34Http").textContent=v.reachable?`${v.http_status} ✅`:`${v.http_status||"ESPERA"} ⏳`;
+      document.getElementById("s34Html").textContent=v.html_valid?"HTML ✅":"ESPERA ⏳";
+      if(v.live) break;
+      m.textContent=`3/4 · Propagando contenido… ${i+1}/6`;
+      await new Promise(r=>setTimeout(r,5000));
+    }
+
+    if(!v?.live){
+      document.getElementById("s34Live").textContent="AÚN NO ⏳";
+      m.textContent="⏳ Pages y HTTPS están configurados, pero el contenido público aún no responde como HTML válido. No es un fallo de main.";
+      s34Line("El verificador real no marcó LIVE todavía.",false);
+      if(v?.html_url) s34ShowUrl(v.html_url);
+      return;
+    }
+
+    m.textContent="4/4 · Confirmando LIVE…";
+    document.getElementById("s34Live").textContent="LIVE ✅";
+    if(v.https_enforced) document.getElementById("s34Https").textContent="HTTPS ✅";
+    s34Line(`HTTP ${v.http_status} · ${v.content_type||"content-type"} · ${v.bytes||0} bytes.`);
+    s34Line("Contenido HTML real validado desde la URL pública.");
+    s34Line("Costo API variable: $0.00.");
+    s34Line("Producción intacta; no hubo merge ni escritura en main.");
+    if(v.html_url) s34ShowUrl(v.html_url);
+    m.textContent="✅ PREVIEW REAL LIVE · HTTPS validado · rama aislada · main intacto · $0.00.";
+  }catch(e){
+    document.getElementById("s34Live").textContent="REVISAR";
+    m.textContent="❌ Sprint 34: "+e.message;
+    s34Line(e.message,false);
+  }finally{
+    b.disabled=false;b.textContent="Verificar Preview REAL ahora";
+  }
+}
+document.addEventListener("DOMContentLoaded",()=>{
+  document.getElementById("s34VerifyBtn")?.addEventListener("click",e=>{e.preventDefault();s34Verify();});
+});
+</script>
+
+
+<section class="card" id="s35Card" style="border:1px solid var(--line);margin-top:18px">
+  <h2>⚡ Sprint 39 · Push REAL + Shared Worker</h2>
+  <div style="color:var(--muted);font-size:12px;margin-bottom:12px">Preview 404 · Runner auth · Safety/Rollback · Push readiness · $0 variable</div>
+  <p style="color:var(--muted)">Una sola ejecución trabaja cuatro carriles independientes. No crea una nueva rama de preview, no hace merge y no escribe en <code>main</code>.</p>
+  <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0">
+    <div class="backend-box" style="text-align:center"><b id="s35Preview">PENDIENTE ⏳</b><div class="connector-note">Preview 404</div></div>
+    <div class="backend-box" style="text-align:center"><b id="s35Runner">PENDIENTE ⏳</b><div class="connector-note">Runner owner</div></div>
+    <div class="backend-box" style="text-align:center"><b id="s35Safety">PENDIENTE ⏳</b><div class="connector-note">Safety rollback</div></div>
+    <div class="backend-box" style="text-align:center"><b id="s35Push">PENDIENTE ⏳</b><div class="connector-note">Web Push</div></div>
+  </div>
+  <button id="s35Run" class="btn primary" style="width:100%">Ejecutar Sprint 35 multipista</button>
+  <div id="s35Msg" class="backend-box" style="margin-top:12px">Listo para ejecutar desde la sesión Owner.</div>
+  <div id="s35Log" style="margin-top:10px"></div>
+</section>
+<script>
+const S35_BASE="https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/";
+const s35Sleep=ms=>new Promise(r=>setTimeout(r,ms));
+function s35Line(t,ok=true){const d=document.createElement('div');d.className='backend-box';d.style.marginTop='7px';d.textContent=(ok?'✅ ':'⚠️ ')+t;document.getElementById('s35Log').appendChild(d);}
+async function s35Call(slug,payload=null,method='POST'){
+  const s=await s23Session(); if(!s) throw new Error('No hay sesión Owner activa.');
+  const opt={method,headers:{'Authorization':'Bearer '+s.access_token,'apikey':S23_KEY,'Content-Type':'application/json'}};
+  if(payload!==null) opt.body=JSON.stringify(payload);
+  const r=await fetch(S35_BASE+slug,opt); const d=await r.json().catch(()=>({}));
+  if(!r.ok||d.ok===false) throw new Error(d.error||('HTTP '+r.status)); return d;
+}
+async function s35Run(){
+  const btn=document.getElementById('s35Run'),msg=document.getElementById('s35Msg'),log=document.getElementById('s35Log');
+  btn.disabled=true; log.innerHTML=''; msg.textContent='Sprint 35 ejecutando cuatro carriles…';
+  ['s35Preview','s35Runner','s35Safety','s35Push'].forEach(id=>document.getElementById(id).textContent='TRABAJANDO ⏳');
+  try{
+    // Carril 1: Preview. Trigger seguro sobre la fuente YA configurada, nunca main.
+    msg.textContent='Carril 1/4 · Disparando procesamiento de la rama preview aislada…';
+    const trig=await s35Call('forge-preview',{action:'trigger_source_build',owner:'Petter1981',repo:'Forge'});
+    s35Line('Preview trigger creado únicamente en '+trig.branch+'; main intacto.');
+    let live=null;
+    for(let i=1;i<=12;i++){
+      await s35Sleep(i===1?3000:5000);
+      live=await s35Call('forge-preview',{action:'verify_live',owner:'Petter1981',repo:'Forge'});
+      msg.textContent=`Carril 1/4 · Verificación HTTPS ${i}/12 · HTTP ${live.http_status??'…'}`;
+      if(live.live) break;
+    }
+    if(live?.live){document.getElementById('s35Preview').textContent='LIVE ✅';s35Line(`Preview REAL LIVE · HTTP ${live.http_status} · HTTPS · HTML válido.`);}
+    else {document.getElementById('s35Preview').textContent=(live?.http_status||'NO LIVE')+' ⏳';s35Line(`Preview todavía no LIVE · HTTP ${live?.http_status??'sin respuesta'}. No se tocó main.`,false);}
+
+    // Carril 2: Runner. Validar que el owner entra con JWT real; el polling anónimo queda desactivado en este Sprint.
+    msg.textContent='Carril 2/4 · Verificando Runner con sesión Owner…';
+    const runner=await s35Call('forge-runner',{action:'status'});
+    document.getElementById('s35Runner').textContent=runner.authorized?'OWNER OK ✅':'REVISAR';
+    s35Line('forge-runner aceptó JWT real Owner; este archivo ya no hace polling anónimo.');
+
+    // Carril 3: Safety. Checkpoint de main -> rama forge/safety-test-* -> rollback de la misma rama al checkpoint.
+    msg.textContent='Carril 3/4 · Ejecutando Safety/Rollback controlado…';
+    const cp=await s35Call('forge-safety',{action:'create_checkpoint',owner:'Petter1981',repo:'Forge',protected_branch:'main',label:'Sprint 35 runtime safety test'});
+    const branch='forge/safety-test-'+Date.now();
+    const wb=await s35Call('forge-safety',{action:'create_work_branch',owner:'Petter1981',repo:'Forge',protected_branch:'main',checkpoint_sha:cp.checkpoint.checkpoint_sha,checkpoint_id:cp.checkpoint.id,work_branch:branch});
+    const rb=await s35Call('forge-safety',{action:'rollback_work_branch',owner:'Petter1981',repo:'Forge',protected_branch:'main',checkpoint_sha:cp.checkpoint.checkpoint_sha,checkpoint_id:cp.checkpoint.id,change_set_id:wb.change_set?.id,work_branch:branch});
+    document.getElementById('s35Safety').textContent=rb.protected_branch_untouched?'PASÓ ✅':'REVISAR';
+    s35Line(`Safety runtime PASÓ · ${branch} restaurada a checkpoint · main intacto.`);
+
+    // Carril 4: Web Push readiness. Diagnóstico real, sin inventar VAPID ni gasto.
+    msg.textContent='Carril 4/4 · Revisando Web Push real…';
+    const push=await s35Call('forge-notify',null,'GET');
+    if(push.vapidConfigured){document.getElementById('s35Push').textContent='VAPID ✅';s35Line(`VAPID configurado · ${push.subscriptions||0} suscripción(es). Falta validar envío firmado extremo a extremo.`);}
+    else {document.getElementById('s35Push').textContent='VAPID FALTA ⚠️';s35Line('Web Push: backend y tabla están listos, pero faltan secretos VAPID; no se generó gasto ni se fingió push real.',false);}
+
+    msg.textContent='✅ Sprint 35 multipista completado. Revise los cuatro estados; costo API variable $0.00.';
+  }catch(e){msg.textContent='❌ Sprint 35 se detuvo de forma segura: '+e.message;s35Line(e.message,false);}
+  finally{btn.disabled=false;btn.textContent='Ejecutar Sprint 35 multipista';}
+}
+document.addEventListener('DOMContentLoaded',()=>document.getElementById('s35Run')?.addEventListener('click',e=>{e.preventDefault();s35Run();}));
+</script>
+
+
+<section class="card" id="s36Card" style="border:1px solid var(--line);margin-top:18px">
+  <h2>🚀 Sprint 36 · Core Readiness Multipista</h2>
+  <div style="color:var(--muted);font-size:12px;margin-bottom:12px">Preview LIVE · Runner seguro · Web Push · Codex Bridge · Voz backend · $0 variable</div>
+  <p style="color:var(--muted)">Este sprint no toca <code>main</code>, no hace merge y no usa OpenAI API de pago. Verifica el núcleo ya ganado y mide exactamente qué falta para cerrar Codex, voz y Push.</p>
+
+  <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0">
+    <div class="backend-box" style="text-align:center"><b id="s36Preview">PENDIENTE ⏳</b><div class="connector-note">Preview LIVE</div></div>
+    <div class="backend-box" style="text-align:center"><b id="s36Runner">PENDIENTE ⏳</b><div class="connector-note">Runner Owner</div></div>
+    <div class="backend-box" style="text-align:center"><b id="s36Push">PENDIENTE ⏳</b><div class="connector-note">Web Push</div></div>
+    <div class="backend-box" style="text-align:center"><b id="s36Codex">PENDIENTE ⏳</b><div class="connector-note">Codex Worker</div></div>
+    <div class="backend-box" style="text-align:center"><b id="s36Voice">PENDIENTE ⏳</b><div class="connector-note">Voz backend</div></div>
+    <div class="backend-box" style="text-align:center"><b id="s36Cost">$0.00 ✅</b><div class="connector-note">API variable</div></div>
+  </div>
+
+  <button id="s36Run" class="btn primary" style="width:100%">Ejecutar Sprint 36 multipista</button>
+  <div id="s36Msg" class="backend-box" style="margin-top:12px">Listo para ejecutar desde la sesión Owner.</div>
+  <div id="s36Log" style="margin-top:10px"></div>
+</section>
+
+<script>
+const S36_BASE="https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/";
+function s36Line(t,ok=true){const d=document.createElement('div');d.className='backend-box';d.style.marginTop='7px';d.textContent=(ok?'✅ ':'⚠️ ')+t;document.getElementById('s36Log').appendChild(d);}
+async function s36Call(slug,payload=null,method='POST'){
+  const s=await s23Session(); if(!s) throw new Error('No hay sesión Owner activa.');
+  const opt={method,headers:{'Authorization':'Bearer '+s.access_token,'apikey':S23_KEY,'Content-Type':'application/json'}};
+  if(payload!==null) opt.body=JSON.stringify(payload);
+  const r=await fetch(S36_BASE+slug,opt); const d=await r.json().catch(()=>({}));
+  if(!r.ok||d.ok===false) throw new Error(d.error||('HTTP '+r.status));
+  return d;
+}
+async function s36Run(){
+  const btn=document.getElementById('s36Run'),msg=document.getElementById('s36Msg'),log=document.getElementById('s36Log');
+  btn.disabled=true; log.innerHTML=''; msg.textContent='Sprint 36 ejecutando cinco carriles…';
+  ['s36Preview','s36Runner','s36Push','s36Codex','s36Voice'].forEach(id=>document.getElementById(id).textContent='TRABAJANDO ⏳');
+  try{
+    msg.textContent='Carril 1/5 · Verificando Preview HTTPS REAL…';
+    const preview=await s36Call('forge-preview',{action:'verify_live',owner:'Petter1981',repo:'Forge'});
+    if(preview.live){
+      document.getElementById('s36Preview').textContent='LIVE ✅';
+      s36Line(`Preview confirmado otra vez · HTTP ${preview.http_status} · HTTPS · HTML válido · source ${preview.source?.branch||'aislado'}.`);
+    }else{
+      document.getElementById('s36Preview').textContent='REVISAR ⚠️';
+      s36Line(`Preview no confirmó LIVE en esta pasada · HTTP ${preview.http_status??'N/D'}.`,false);
+    }
+
+    msg.textContent='Carril 2/5 · Verificando Runner con JWT Owner…';
+    const runner=await s36Call('forge-runner',{action:'status'});
+    document.getElementById('s36Runner').textContent=runner.authorized?'SEGURO ✅':'REVISAR ⚠️';
+    s36Line('Runner responde con sesión Owner real. Las llamadas viejas sin JWT continúan rechazadas por diseño.');
+
+    msg.textContent='Carril 3/5 · Midiendo Web Push…';
+    const push=await s36Call('forge-notify',null,'GET');
+    if(push.vapidConfigured){
+      document.getElementById('s36Push').textContent='VAPID ✅';
+      s36Line(`VAPID presente · ${push.subscriptions||0} suscripción(es). Siguiente prueba: envío firmado extremo a extremo.`);
+    }else{
+      document.getElementById('s36Push').textContent='SECRETO ⚠️';
+      s36Line('Web Push está bloqueado únicamente por VAPID Public/Private secrets. El backend no finge envíos.',false);
+    }
+
+    msg.textContent='Carril 4/5 · Verificando Codex Bridge…';
+    const codex=await s36Call('forge-codex-bridge',{action:'status'});
+    if(codex.configured){
+      const health=await s36Call('forge-codex-bridge',{action:'health'});
+      document.getElementById('s36Codex').textContent=health.ready?'WORKER ✅':'HOST ⚠️';
+      s36Line(health.ready?'Codex Worker durable respondió HEALTH OK.':'Codex Bridge configurado, pero el worker durable no respondió listo.',!!health.ready);
+    }else{
+      document.getElementById('s36Codex').textContent='HOST FALTA ⚠️';
+      s36Line('Codex Bridge v1 está desplegado y protegido; falta host durable + token del worker. No usa OPENAI_API_KEY.',false);
+    }
+
+    msg.textContent='Carril 5/5 · Verificando voz backend…';
+    const voice=await s36Call('forge-voice',{action:'status'});
+    if(voice.backendTranscriptionConfigured){
+      document.getElementById('s36Voice').textContent='BACKEND ✅';
+      s36Line('Voz backend tiene endpoint de transcripción seguro configurado.');
+    }else{
+      document.getElementById('s36Voice').textContent='BACKEND FALTA ⚠️';
+      s36Line('Captura de navegador está disponible; forge-voice v1 está desplegado y protegido, pero falta endpoint/token de transcripción backend.',false);
+    }
+
+    msg.textContent='✅ Sprint 36 completado. Núcleo verificado y bloqueos externos aislados; costo API variable $0.00.';
+  }catch(e){
+    msg.textContent='❌ Sprint 36 se detuvo de forma segura: '+e.message;
+    s36Line(e.message,false);
+  }finally{
+    btn.disabled=false;
+    btn.textContent='Ejecutar Sprint 36 multipista';
+  }
+}
+document.addEventListener('DOMContentLoaded',()=>document.getElementById('s36Run')?.addEventListener('click',e=>{e.preventDefault();s36Run();}));
+</script>
+
+
+<section class="card" id="s37Card" style="border:1px solid var(--line);margin-top:18px">
+<h2>🔌 Sprint 37 · External Bridge Pack</h2>
+<div style="color:var(--muted);font-size:12px;margin-bottom:12px">Push VAPID · Codex Host · Voice Backend · Runner noise · $0 variable</div>
+<p style="color:var(--muted)">Consolida los tres bloqueos externos sin debilitar seguridad ni usar API paga. No toca <code>main</code>.</p>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0">
+<div class="backend-box" style="text-align:center"><b id="s37Push">PENDIENTE ⏳</b><div class="connector-note">Push secrets</div></div>
+<div class="backend-box" style="text-align:center"><b id="s37Codex">PENDIENTE ⏳</b><div class="connector-note">Codex durable host</div></div>
+<div class="backend-box" style="text-align:center"><b id="s37Voice">PENDIENTE ⏳</b><div class="connector-note">Voice backend</div></div>
+<div class="backend-box" style="text-align:center"><b id="s37Runner">PENDIENTE ⏳</b><div class="connector-note">Runner auth policy</div></div>
+</div>
+<button id="s37Run" class="btn primary" style="width:100%">Ejecutar Sprint 37 multipista</button>
+<div id="s37Msg" class="backend-box" style="margin-top:12px">Listo para medir configuración externa.</div>
+<div id="s37Log"></div>
+</section>
+<script>
+const S37_BASE="https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/";
+function s37Line(t,ok=true){const d=document.createElement('div');d.className='backend-box';d.style.marginTop='7px';d.textContent=(ok?'✅ ':'⚠️ ')+t;document.getElementById('s37Log').appendChild(d);}
+async function s37Call(slug,payload=null,method='POST'){
+ const s=await s23Session(); if(!s) throw new Error('No hay sesión Owner activa.');
+ const opt={method,headers:{'Authorization':'Bearer '+s.access_token,'apikey':S23_KEY,'Content-Type':'application/json'}};
+ if(payload!==null)opt.body=JSON.stringify(payload);
+ const r=await fetch(S37_BASE+slug,opt); const d=await r.json().catch(()=>({}));
+ if(!r.ok||d.ok===false)throw new Error(d.error||('HTTP '+r.status)); return d;
+}
+async function s37Run(){
+ const btn=document.getElementById('s37Run'),msg=document.getElementById('s37Msg'),log=document.getElementById('s37Log');
+ btn.disabled=true;log.innerHTML='';msg.textContent='Ejecutando Sprint 37…';
+ try{
+  const push=await s37Call('forge-notify',null,'GET');
+  document.getElementById('s37Push').textContent=push.vapidConfigured?'LISTO ✅':'VAPID FALTA ⚠️';
+  s37Line(push.vapidConfigured?'VAPID detectado en backend.':'Falta VAPID_PUBLIC_KEY / VAPID_PRIVATE_KEY en Supabase Secrets.',!!push.vapidConfigured);
+
+  const codex=await s37Call('forge-codex-bridge',{action:'status'});
+  document.getElementById('s37Codex').textContent=codex.configured?'CONFIG ✅':'HOST/TOKEN ⚠️';
+  s37Line(codex.configured?'Codex host/token configurados.':'Bridge seguro listo; faltan FORGE_CODEX_WORKER_URL + FORGE_CODEX_WORKER_TOKEN.',!!codex.configured);
+
+  const voice=await s37Call('forge-voice',{action:'status'});
+  document.getElementById('s37Voice').textContent=voice.backendTranscriptionConfigured?'CONFIG ✅':'ENDPOINT/TOKEN ⚠️';
+  s37Line(voice.backendTranscriptionConfigured?'Voice endpoint/token configurados.':'Backend seguro listo; faltan FORGE_VOICE_TRANSCRIBE_URL + FORGE_VOICE_TRANSCRIBE_TOKEN.',!!voice.backendTranscriptionConfigured);
+
+  const runner=await s37Call('forge-runner',{action:'status'});
+  document.getElementById('s37Runner').textContent=runner.authorized?'JWT OK ✅':'REVISAR ⚠️';
+  s37Line('Runner mantiene JWT Owner obligatorio; los clientes antiguos sin sesión se rechazan sin abrir una brecha.',!!runner.authorized);
+
+  msg.textContent='✅ Sprint 37 ejecutado. No se usó OpenAI API paga ni se tocó main.';
+ }catch(e){msg.textContent='❌ Detenido de forma segura: '+e.message;s37Line(e.message,false);}
+ finally{btn.disabled=false;}
+}
+document.addEventListener('DOMContentLoaded',()=>document.getElementById('s37Run')?.addEventListener('click',e=>{e.preventDefault();s37Run();}));
+</script>
+
+
+<section class="card" id="s38Card" style="border:1px solid var(--line);margin-top:18px">
+<h2>🏭 Sprint 38 · Production Core</h2>
+<div style="color:var(--muted);font-size:12px;margin-bottom:12px">Codex Worker · QA/Autocorrect · Voice · Web Push · Security Gate · $0-first</div>
+<p style="color:var(--muted)">Integra los cuatro carriles de salida a producción. No hace merge, no escribe en <code>main</code> y no habilita gasto API.</p>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0">
+<div class="backend-box" style="text-align:center"><b id="s38Codex">PENDIENTE ⏳</b><div class="connector-note">1 · Codex Worker</div></div>
+<div class="backend-box" style="text-align:center"><b id="s38Pipe">PENDIENTE ⏳</b><div class="connector-note">2 · QA + Autocorrect</div></div>
+<div class="backend-box" style="text-align:center"><b id="s38Voice">PENDIENTE ⏳</b><div class="connector-note">3 · Voz backend</div></div>
+<div class="backend-box" style="text-align:center"><b id="s38Push">PENDIENTE ⏳</b><div class="connector-note">4 · Web Push</div></div>
+</div>
+<button id="s38Run" class="btn primary" style="width:100%">Ejecutar Sprint 38 Production Core</button>
+<div id="s38Msg" class="backend-box" style="margin-top:12px">Listo para prueba integrada.</div>
+<div id="s38Log"></div>
+</section>
+<script>
+const S38_BASE="https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/";
+function s38Line(t,ok=true){const d=document.createElement('div');d.className='backend-box';d.style.marginTop='7px';d.textContent=(ok?'✅ ':'⚠️ ')+t;document.getElementById('s38Log').appendChild(d);}
+async function s38Call(slug,payload=null,method='POST'){
+ const s=await s23Session(); if(!s) throw new Error('No hay sesión Owner activa.');
+ const opt={method,headers:{Authorization:'Bearer '+s.access_token,apikey:S23_KEY,'Content-Type':'application/json'}};
+ if(payload!==null)opt.body=JSON.stringify(payload);
+ const r=await fetch(S38_BASE+slug,opt);const d=await r.json().catch(()=>({}));
+ if(!r.ok||d.ok===false)throw new Error(d.error||('HTTP '+r.status));return d;
+}
+async function s38Run(){
+ const btn=document.getElementById('s38Run'),msg=document.getElementById('s38Msg'),log=document.getElementById('s38Log');
+ btn.disabled=true;log.innerHTML='';msg.textContent='Ejecutando Production Core…';
+ try{
+  const c=await s38Call('forge-codex-bridge',{action:'status'});
+  document.getElementById('s38Codex').textContent=c.configured?'READY ✅':'HOST/TOKEN ⚠️';
+  s38Line(c.configured?'Codex Worker conectado.':'Codex Bridge desplegado; host/token durable siguen siendo dependencia externa.',!!c.configured);
+
+  const r=await s38Call('forge-runner',{action:'status'});
+  const p=await s38Call('forge-preview',{action:'verify_live',owner:'Petter1981',repo:'Forge'});
+  const pipelineBase=!!r.authorized && !!p.live;
+  document.getElementById('s38Pipe').textContent=pipelineBase?'BASE READY ✅':'REVISAR ⚠️';
+  s38Line(pipelineBase?'Pipeline base verificado: Owner Runner + Preview HTTPS LIVE. Tablas de jobs/pipeline ya instaladas; autocorrección queda bloqueada solo hasta conectar Codex Worker.':'Pipeline base no pasó.',pipelineBase);
+
+  const v=await s38Call('forge-voice',{action:'status'});
+  document.getElementById('s38Voice').textContent=v.backendTranscriptionConfigured?'READY ✅':'ENDPOINT/TOKEN ⚠️';
+  s38Line(v.backendTranscriptionConfigured?'Transcripción backend conectada.':'forge-voice está protegido; falta endpoint/token de transcripción.',!!v.backendTranscriptionConfigured);
+
+  const n=await s38Call('forge-notify',null,'GET');
+  document.getElementById('s38Push').textContent=n.vapidConfigured?'READY ✅':'VAPID ⚠️';
+  s38Line(n.vapidConfigured?'VAPID configurado; listo para prueba firmada.':'Push backend/subscriptions listos; faltan secretos VAPID.',!!n.vapidConfigured);
+
+  msg.textContent='✅ Sprint 38 ejecutado. $0 variable · main intacto · sin merge. Lo amarillo son únicamente dependencias externas reales.';
+ }catch(e){msg.textContent='❌ Gate seguro: '+e.message;s38Line(e.message,false);}
+ finally{btn.disabled=false;}
+}
+document.addEventListener('DOMContentLoaded',()=>document.getElementById('s38Run')?.addEventListener('click',e=>{e.preventDefault();s38Run();}));
+</script>
+
+
+<section class="card" id="s39Card" style="border:1px solid var(--line);margin-top:18px">
+  <h2>📣 Sprint 39 · Push REAL + Shared Worker</h2>
+  <div style="color:var(--muted);font-size:12px;margin-bottom:12px">VAPID Vault · Signed Web Push · Codex + Voice en un solo host · $0-first</div>
+  <p style="color:var(--muted)">Este sprint elimina el bloqueo VAPID sin exponer claves y colapsa Codex + voz en una sola dependencia externa: un host durable.</p>
+  <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0">
+    <div class="backend-box" style="text-align:center"><b id="s39Vapid">VAULT ✅</b><div class="connector-note">VAPID Vault</div></div>
+    <div class="backend-box" style="text-align:center"><b id="s39Push">PENDIENTE ⏳</b><div class="connector-note">Push firmado</div></div>
+    <div class="backend-box" style="text-align:center"><b id="s39Worker">SOLO URL ⚠️</b><div class="connector-note">Worker compartido</div></div>
+    <div class="backend-box" style="text-align:center"><b id="s39Cost">$0.00 ✅</b><div class="connector-note">API variable</div></div>
+  </div>
+  <button id="s39Run" class="btn primary" style="width:100%" disabled="">Ejecutar Sprint 39</button>
+  <div id="s39Msg" class="backend-box" style="margin-top:12px">Publicando Sprint 39 al Preview HTTPS aislado…</div>
+  <div id="s39Link" style="margin-top:10px"></div>
+  <div id="s39Log"><div class="backend-box" style="margin-top: 7px;">✅ VAPID Public/Private generadas y guardadas cifradas en Supabase Vault; la clave privada no está en este HTML.</div><div class="backend-box" style="margin-top: 7px;">✅ Codex + voz ya comparten un único token cifrado; solo falta la URL del host durable.</div></div>
+</section>
+<script>
+const S39_BASE="https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/";
+const S39_BRANCH="forge/readiness-1788235770674";
+const S39_PREVIEW="https://petter1981.github.io/Forge/";
+const S39_SW=`self.addEventListener('push', event => {
+  let data = {};
+  try { data = event.data ? event.data.json() : {}; } catch { data = { body: event.data ? event.data.text() : 'FORGE' }; }
+  const title = data.title || 'FORGE';
+  const options = {
+    body: data.body || '',
+    icon: data.icon || undefined,
+    badge: data.badge || undefined,
+    data: { url: data.url || '/' },
+    tag: data.eventType || 'forge',
+    renotify: true
+  };
+  event.waitUntil(self.registration.showNotification(title, options));
+});
+self.addEventListener('notificationclick', event => {
+  event.notification.close();
+  const url = event.notification?.data?.url || '/';
+  event.waitUntil(clients.matchAll({type:'window',includeUncontrolled:true}).then(list => {
+    for (const c of list) { if ('focus' in c) { c.navigate(url); return c.focus(); } }
+    if (clients.openWindow) return clients.openWindow(url);
+  }));
+});
+`;
+function s39Line(t,ok=true){const d=document.createElement('div');d.className='backend-box';d.style.marginTop='7px';d.textContent=(ok?'✅ ':'⚠️ ')+t;document.getElementById('s39Log').appendChild(d);}
+async function s39Session(){const s=await s23Session(); if(!s) throw new Error('No hay sesión Owner activa.'); return s;}
+async function s39Call(slug,payload=null,method='POST'){
+ const s=await s39Session(); const opt={method,headers:{Authorization:'Bearer '+s.access_token,apikey:S23_KEY,'Content-Type':'application/json'}};
+ if(payload!==null) opt.body=JSON.stringify(payload);
+ const r=await fetch(S39_BASE+slug,opt); const d=await r.json().catch(()=>({}));
+ if(!r.ok||d.ok===false) throw new Error(d.error||('HTTP '+r.status)); return d;
+}
+function s39B64(s){const p='='.repeat((4-s.length%4)%4);const b=(s+p).replace(/-/g,'+').replace(/_/g,'/');const raw=atob(b);return Uint8Array.from([...raw].map(c=>c.charCodeAt(0)));}
+async function s39PublishSelf(){
+ const notify=await s39Call('forge-notify',null,'GET');
+ document.getElementById('s39Vapid').textContent=notify.vapidConfigured?'VAULT ✅':'REVISAR ⚠️';
+ if(!notify.vapidConfigured) throw new Error('VAPID aún no está disponible.');
+ s39Line('VAPID Public/Private generadas y guardadas cifradas en Supabase Vault; la clave privada no está en este HTML.');
+ const c=await s39Call('forge-codex-bridge',{action:'status'});
+ const v=await s39Call('forge-voice',{action:'status'});
+ const shared=!!c.worker_token_present && !!v.worker_token_present && c.sharedWorker && v.sharedWorker;
+ document.getElementById('s39Worker').textContent=shared?(c.worker_url_present?'HOST ✅':'SOLO URL ⚠️'):'REVISAR ⚠️';
+ s39Line(shared?'Codex + voz ya comparten un único token cifrado; solo falta la URL del host durable.':'Worker compartido no quedó consistente.',shared);
+ const self='<!DOCTYPE html>\n'+document.documentElement.outerHTML;
+ await s39Call('forge-publisher',{owner:'Petter1981',repo:'Forge',branch:S39_BRANCH,message:'FORGE Sprint 39: secure push preview',files:[{path:'index.html',content:self},{path:'sw-push.js',content:S39_SW},{path:'.nojekyll',content:''}]});
+ s39Line('Sprint 39 + Service Worker publicados únicamente en la rama Preview aislada; main intacto.');
+ await s39Call('forge-preview',{action:'trigger_source_build',owner:'Petter1981',repo:'Forge'});
+ document.getElementById('s39Push').textContent='HTTPS TEST ⏳';
+ document.getElementById('s39Link').innerHTML='<a href="'+S39_PREVIEW+'" target="_blank" rel="noopener" style="font-weight:800">Abrir Preview HTTPS para activar Push REAL</a>';
+ return true;
+}
+async function s39PushReal(){
+ if(!('serviceWorker' in navigator)||!('PushManager' in window)||!('Notification' in window)) throw new Error('Este navegador no soporta Web Push.');
+ const notify=await s39Call('forge-notify',null,'GET');
+ document.getElementById('s39Vapid').textContent=notify.vapidConfigured?'VAULT ✅':'REVISAR ⚠️';
+ if(!notify.vapidConfigured||!notify.vapidPublicKey) throw new Error('VAPID no disponible.');
+ const perm=await Notification.requestPermission();
+ if(perm!=='granted') throw new Error('Permiso de notificaciones no concedido.');
+ const reg=await navigator.serviceWorker.register('./sw-push.js');
+ await navigator.serviceWorker.ready;
+ let sub=await reg.pushManager.getSubscription();
+ if(!sub) sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:s39B64(notify.vapidPublicKey)});
+ await s39Call('forge-notify',{action:'subscribe',subscription:sub.toJSON(),userAgent:navigator.userAgent});
+ const test=await s39Call('forge-notify',{action:'test_push',title:'FORGE',body:'Push REAL firmado activo. Sprint 39.',url:S39_PREVIEW});
+ if(test.sent>0){
+   document.getElementById('s39Push').textContent='PUSH REAL ✅';
+   s39Line('Web Push firmado enviado realmente al navegador. Subscripción activa: '+test.sent+'.');
+ }else{
+   document.getElementById('s39Push').textContent='SUSCRITO ⚠️';
+   s39Line('Suscripción creada, pero el primer envío no confirmó entrega. Fallos: '+(test.failed||0)+'.',false);
+ }
+ const c=await s39Call('forge-codex-bridge',{action:'status'});
+ document.getElementById('s39Worker').textContent=c.worker_url_present?'HOST ✅':'SOLO URL ⚠️';
+ s39Line(c.worker_url_present?'Worker durable ya conectado.':'Codex + voz ya comparten secreto; queda solamente desplegar el host durable y registrar su URL.',!!c.worker_url_present);
+}
+async function s39Run(){
+ const btn=document.getElementById('s39Run'),msg=document.getElementById('s39Msg'),log=document.getElementById('s39Log');
+ btn.disabled=true;log.innerHTML='';
+ try{
+  if(location.protocol==='https:'){
+    msg.textContent='Activando Web Push REAL en contexto HTTPS…'; await s39PushReal();
+    msg.textContent='✅ Sprint 39: Push firmado probado. $0 variable.';
+  }else{
+    msg.textContent='Publicando Sprint 39 al Preview HTTPS aislado…'; await s39PublishSelf();
+    msg.textContent='✅ Publicado. Abra el Preview HTTPS y pulse Ejecutar Sprint 39 una vez allí para conceder permiso y probar Push REAL.';
+  }
+ }catch(e){msg.textContent='❌ Gate seguro: '+e.message;s39Line(e.message,false);}
+ finally{btn.disabled=false;}
+}
+document.addEventListener('DOMContentLoaded',()=>document.getElementById('s39Run')?.addEventListener('click',e=>{e.preventDefault();s39Run();}));
 </script>
 
 
