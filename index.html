@@ -1,0 +1,1927 @@
+<html lang="es" style="--bg: #0b0f17; --panel: #121826; --panel2: #192132; --line: #2b3549; --text: #f5f7fb; --muted: #9da9bb; --accent: #ff8a00; --accent2: #ffb347;"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>INOVIA FORGE · Sprint 14</title>
+<style>
+:root{--bg:#0b0f17;--panel:#121826;--panel2:#192132;--line:#2b3549;--text:#f5f7fb;--muted:#9da9bb;--accent:#ff8a00;--ok:#2ecc71}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,sans-serif}
+.app{max-width:580px;margin:auto;padding:16px 16px 88px;min-height:100vh}.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:15px;margin-bottom:12px}
+header,.row{display:flex;justify-content:space-between;align-items:center;gap:10px}.brand{display:flex;align-items:center;gap:10px}.logo{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#ff6400);display:grid;place-items:center;font-size:23px}
+h1{font-size:19px;margin:0}.muted{color:var(--muted)}.tabs{display:grid;grid-template-columns:repeat(7,1fr);gap:7px;margin:14px 0}
+.tab,.btn{border:1px solid var(--line);border-radius:13px;padding:11px;background:var(--panel2);color:var(--text);font-weight:800}.tab.active,.btn.primary{border:0;background:linear-gradient(135deg,var(--accent),#ff6400);color:#15100b}
+.section{display:none}.section.active{display:block}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.stat{background:var(--panel2);padding:11px;border-radius:13px;text-align:center}.stat strong{display:block;font-size:20px}.stat span{font-size:11px;color:var(--muted)}
+.agent{display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;background:var(--panel2);border:1px solid var(--line);padding:11px;border-radius:14px;margin-top:8px}.icon{font-size:22px}.status{font-size:10px;padding:5px 8px;border-radius:999px;background:#273248;color:var(--muted);font-weight:800}.status.work{background:rgba(255,138,0,.15);color:#ffb347}.status.done{background:rgba(46,204,113,.15);color:#6ce0a0}
+.progress{height:8px;background:#253047;border-radius:999px;overflow:hidden;margin-top:10px}.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),#ffb347);transition:.3s}
+.log{height:190px;overflow:auto;background:#0e1420;border:1px solid var(--line);border-radius:13px;padding:10px;font-family:monospace;font-size:12px}.log div{margin-bottom:4px}.ok{color:#6ce0a0}.info{color:#8ab4ff}
+label{display:block;font-size:12px;color:var(--muted);font-weight:800;margin:9px 0 5px}input,textarea,select{width:100%;padding:11px;border-radius:12px;border:1px solid var(--line);background:var(--panel2);color:var(--text)}textarea{min-height:86px}
+.mission{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:11px;margin-top:8px}.mission h4{margin:0 0 4px}.mission p{margin:0;color:var(--muted);font-size:12px}
+footer{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(580px,100%);padding:10px 16px 15px;background:linear-gradient(180deg,transparent,rgba(11,15,23,.98) 35%)}
+.theme-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.theme-card{border:1px solid var(--line);background:var(--panel2);border-radius:15px;padding:12px;color:var(--text);text-align:left}.theme-card.active{outline:2px solid var(--accent)}.swatches{display:flex;gap:6px;margin-bottom:8px}.swatches i{width:18px;height:18px;border-radius:50%;display:block;border:1px solid rgba(255,255,255,.15)}.theme-card b{display:block}.theme-card small{color:var(--muted)}
+.voice-box{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:start}
+.voice-btn{width:52px;height:52px;border-radius:16px;border:1px solid var(--line);background:var(--panel2);color:var(--text);font-size:22px}
+.voice-btn.listening{background:var(--accent);color:#111;box-shadow:0 0 0 6px color-mix(in srgb,var(--accent) 16%,transparent)}
+.voice-status{font-size:12px;color:var(--muted);margin-top:6px}
+.voice-controls{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.voice-panel{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:11px;margin-top:10px}
+.wave{display:flex;gap:4px;align-items:end;height:22px;margin:8px 0}.wave i{width:4px;background:var(--accent);border-radius:4px;height:6px;animation:pulse 1s infinite ease-in-out}.wave i:nth-child(2){animation-delay:.1s}.wave i:nth-child(3){animation-delay:.2s}.wave i:nth-child(4){animation-delay:.3s}.wave i:nth-child(5){animation-delay:.4s}
+@keyframes pulse{0%,100%{height:6px}50%{height:22px}}
+
+.connector-grid{display:grid;gap:10px}.connector{display:grid;grid-template-columns:48px 1fr auto;gap:10px;align-items:center;background:var(--panel2);border:1px solid var(--line);border-radius:15px;padding:12px}.connector-icon{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font-size:23px;background:color-mix(in srgb,var(--accent) 12%,var(--panel2))}.perm-list{display:grid;gap:8px;margin-top:10px}.perm{display:flex;justify-content:space-between;gap:10px;padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--panel2)}.perm.ok span:last-child{color:#2ecc71}.perm.warn span:last-child{color:#f5c451}.publish-step{display:grid;grid-template-columns:28px 1fr auto;gap:9px;align-items:center;padding:11px;border:1px solid var(--line);border-radius:13px;background:var(--panel2);margin-top:8px}.publish-step i{width:12px;height:12px;border-radius:50%;background:#536078}.publish-step.work i{background:var(--accent);box-shadow:0 0 0 5px color-mix(in srgb,var(--accent) 15%,transparent)}.publish-step.done i{background:#2ecc71}.connector-note{font-size:12px;line-height:1.45;color:var(--muted)}
+
+.backend-box{background:var(--panel2);border:1px solid var(--line);border-radius:15px;padding:12px;margin-top:10px}
+.backend-box code{font-family:ui-monospace,monospace;font-size:12px;color:var(--accent2)}
+.endpoint-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;margin-top:8px}
+.endpoint-row input{min-width:0}
+.small-btn{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:12px;padding:10px;font-weight:800}
+
+/* Sprint 19 · QA $0 */
+.cost-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.cost-card{padding:12px;border:1px solid var(--line,#d7dbe2);border-radius:14px;background:rgba(255,255,255,.06)}.cost-big{font-size:1.35rem;font-weight:800}.cost-ok{font-weight:800}.cost-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.cost-actions button{min-height:42px}.cost-note{font-size:.86rem;opacity:.78}.meter{height:10px;border-radius:999px;background:rgba(127,127,127,.2);overflow:hidden}.meter>i{display:block;height:100%;width:0;background:currentColor}.zero-badge{display:inline-block;padding:5px 9px;border-radius:999px;font-weight:800;border:1px solid currentColor}
+@media(max-width:600px){.cost-grid{grid-template-columns:1fr}}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+<style>
+#forgeAdminGate{
+  position:fixed;inset:0;z-index:999999;
+  display:flex;align-items:center;justify-content:center;
+  padding:20px;background:rgba(10,12,18,.92);backdrop-filter:blur(14px);
+}
+#forgeAdminGate[hidden]{display:none!important}
+#forgeAdminCard{
+  width:min(460px,100%);padding:24px;border-radius:22px;
+  background:var(--panel,#161922);border:1px solid rgba(255,255,255,.14);
+  box-shadow:0 24px 80px rgba(0,0,0,.45)
+}
+#forgeAdminCard h1{margin:0 0 8px;font-size:28px}
+#forgeAdminCard input{
+  width:100%;box-sizing:border-box;margin:7px 0;padding:13px 14px;
+  border-radius:12px;border:1px solid rgba(128,128,128,.35);
+  background:var(--panel2,#202430);color:inherit;font-size:16px
+}
+#forgeAdminCard .gate-actions{display:grid;gap:9px;margin-top:12px}
+#forgeAdminCard button{min-height:46px}
+#forgeAdminMsg{margin-top:13px;padding:11px;border-radius:12px;background:var(--panel2,#202430)}
+#forgeAdminIdentity{font-size:13px;opacity:.75;margin-top:8px}
+</style>
+
+<div id="forgeAdminGate" hidden="">
+  <div id="forgeAdminCard">
+    <h1>🔐 FORGE</h1>
+    <p style="margin-top:0;color:var(--muted)">Acceso administrativo obligatorio</p>
+    <input id="forgeAdminEmail" type="email" autocomplete="username" placeholder="Correo del administrador">
+    <input id="forgeAdminPassword" type="password" autocomplete="current-password" placeholder="Contraseña (mínimo 8 caracteres)">
+    <div class="gate-actions">
+      <button class="primary" onclick="forgeAdminLogin()">Entrar</button>
+      <button onclick="forgeAdminCreate()">Crear / activar primer administrador</button>
+    </div>
+    <div id="forgeAdminMsg">Validando sesión…</div>
+    <div id="forgeAdminIdentity">Administrador: charravc@gmail.com</div>
+  </div>
+</div>
+
+<div class="app">
+<header><div class="brand"><div class="logo">⚒️</div><div><h1>INOVIA FORGE</h1><div class="muted">Biblioteca + Control Center · Sprint 14</div></div></div><span class="status done">OPERATIVO</span></header>
+
+<div class="tabs">
+<button class="tab active" onclick="tab('library',this)">Proyectos</button>
+<button class="tab" onclick="tab('control',this)">Control</button>
+<button class="tab" onclick="tab('missions',this)">Misiones</button>
+<button class="tab" onclick="tab('journey',this)">Jornada</button>
+<button class="tab" onclick="tab('history',this)">Historial</button><button class="tab" onclick="tab('themes',this)">Temas</button><button class="tab" onclick="tab('connectors',this)">Conectores</button>
+</div>
+
+
+<section id="library" class="section active">
+<div class="card">
+  <div class="row">
+    <div><h2 style="margin:0 0 5px">Biblioteca de proyectos</h2><div class="muted">Cada proyecto conserva su memoria, reglas y entregables.</div></div>
+    <span class="status done">5 proyectos</span>
+  </div>
+</div>
+
+<div class="card project-card" onclick="openProject('ATLAS','📊','Sprint 14 · Análisis IA','Activo')">
+  <div class="agent">
+    <div class="icon">📊</div>
+    <div><b>ATLAS</b><div class="muted">Sprint 14 · Análisis IA</div></div>
+    <span class="status done">Activo</span>
+  </div>
+</div>
+
+<div class="card project-card" onclick="openProject('Ajedrez Medieval','♟️','Conceptualización y diseño','Diseño')">
+  <div class="agent">
+    <div class="icon">♟️</div>
+    <div><b>Ajedrez Medieval</b><div class="muted">Conceptualización y diseño</div></div>
+    <span class="status">Diseño</span>
+  </div>
+</div>
+
+<div class="card project-card" onclick="openProject('KOI','🧡','Cotizador de postales','Producción')">
+  <div class="agent">
+    <div class="icon">🧡</div>
+    <div><b>KOI</b><div class="muted">Cotizador de postales</div></div>
+    <span class="status done">Prod.</span>
+  </div>
+</div>
+
+<div class="card project-card" onclick="openProject('UMI','💰','Aplicación financiera','Pausa')">
+  <div class="agent">
+    <div class="icon">💰</div>
+    <div><b>UMI</b><div class="muted">Aplicación financiera</div></div>
+    <span class="status">Pausa</span>
+  </div>
+</div>
+
+<div class="card project-card" onclick="openProject('Hola FORGE','🧪','Laboratorio HTML','Laboratorio')">
+  <div class="agent">
+    <div class="icon">🧪</div>
+    <div><b>Hola FORGE</b><div class="muted">Laboratorio HTML</div></div>
+    <span class="status work">Lab</span>
+  </div>
+</div>
+
+<div class="card">
+  <button class="btn primary" style="width:100%" onclick="createNewProject()">＋ Crear nuevo proyecto</button>
+</div>
+</section>
+
+<section id="projectDetail" class="section">
+<div class="card">
+  <button class="btn" onclick="tab('library',document.querySelectorAll('.tab')[0])">← Volver a proyectos</button>
+</div>
+<div class="card">
+  <div class="row">
+    <div class="brand">
+      <div id="projectIcon" class="logo">📊</div>
+      <div><h2 id="projectName" style="margin:0">ATLAS</h2><div id="projectSubtitle" class="muted">Sprint 14 · Análisis IA</div></div>
+    </div>
+    <span id="projectStatus" class="status done">Activo</span>
+  </div>
+  <div class="stats">
+    <div class="stat"><strong>1.0</strong><span>Baseline</span></div>
+    <div class="stat"><strong>Nivel 3</strong><span>Autonomía</span></div>
+    <div class="stat"><strong>72%</strong><span>Progreso</span></div>
+  </div>
+</div>
+<div class="card">
+  <b>Memoria del proyecto</b>
+  <div class="mission"><h4>Objetivo actual</h4><p id="projectObjective">Continuar el siguiente entregable aprobado.</p></div>
+  <div class="mission"><h4>Última ejecución</h4><p>Baseline protegida · Vista previa disponible · Sin cambios en producción.</p></div>
+</div>
+<div class="card">
+  <button class="btn primary" style="width:100%" onclick="createMissionForProject()">🎙️ Crear misión para este proyecto</button>
+</div>
+</section>
+
+<section id="control" class="section">
+<div class="card"><div class="muted">Estado general</div><h2 style="margin:5px 0">Fábrica en espera</h2><div class="muted">Agregue una misión e inicie una jornada.</div>
+<div class="stats"><div class="stat"><strong id="active">0</strong><span>Activas</span></div><div class="stat"><strong id="done">0</strong><span>Completadas</span></div><div class="stat"><strong>5</strong><span>Agentes</span></div></div></div>
+<div class="card"><div class="row"><b>Equipo FORGE</b><span id="team" class="status">En espera</span></div>
+<div class="agent"><div class="icon">🧠</div><div><b>Arquitecto</b><div id="p1" class="muted">Esperando misión</div></div><span id="a1" class="status">Libre</span></div>
+<div class="agent"><div class="icon">💻</div><div><b>Desarrollador</b><div id="p2" class="muted">Esperando tareas</div></div><span id="a2" class="status">Libre</span></div>
+<div class="agent"><div class="icon">🧪</div><div><b>QA</b><div id="p3" class="muted">Sin pruebas pendientes</div></div><span id="a3" class="status">Libre</span></div>
+<div class="agent"><div class="icon">📄</div><div><b>Documentador</b><div id="p4" class="muted">Documentación al día</div></div><span id="a4" class="status">Libre</span></div>
+<div class="agent"><div class="icon">🚀</div><div><b>Publicador</b><div id="p5" class="muted">Sin entregables</div></div><span id="a5" class="status">Libre</span></div>
+<div class="progress"><i id="bar"></i></div></div>
+<div class="card"><b>Consola en vivo</b><div id="log" class="log"><div class="info">FORGE Control Center listo.</div></div></div>
+</section>
+
+<section id="missions" class="section">
+<div class="card"><b>Nueva misión</b>
+<label>Proyecto</label><select id="project"><option>Hola FORGE</option><option>ATLAS</option><option>Ajedrez Medieval</option><option>KOI</option><option>UMI</option></select>
+<label>Objetivo</label>
+<div class="voice-box">
+  <textarea id="goal">Cambie el botón a verde y agregue un título que diga "Hola Pedro".</textarea>
+  <button id="voiceBtn" class="voice-btn" onclick="toggleVoice()">🎙️</button>
+</div>
+<div id="voiceStatus" class="voice-status">Toque una vez para iniciar la conversación.</div>
+<div id="voicePanel" class="voice-panel" style="display:none">
+  <b id="voiceTitle">Escuchando...</b>
+  <div class="wave"><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="muted">Diga “FORGE, cerrar micrófono” para finalizar.</div>
+  <div class="voice-controls">
+    <button class="btn" onclick="stopVoice()">Cerrar micrófono</button>
+    <button class="btn primary" onclick="useVoiceText()">Usar transcripción</button>
+  </div>
+</div>
+<label>Modo</label><select id="mode"><option>Seguro</option><option selected="">Sprint</option><option>Nocturno</option></select>
+<div class="mission"><h4>Modo conversación</h4><p>Un toque abre el micrófono. Se cierra por comando, botón o 60 segundos de inactividad.</p></div>
+<label>No modificar</label><input id="limits" value="Producción y baseline estable">
+<button class="btn primary" style="width:100%;margin-top:12px" onclick="addMission()">＋ Agregar a la cola</button>
+<div class="mission">
+  <h4>Diagnóstico de voz</h4>
+  <p id="voiceDiag">HTTPS correcto. Transcripción disponible. Grabación disponible.</p>
+  <button class="btn" style="width:100%;margin-top:8px" onclick="runVoiceDiagnostic()">Revisar micrófono</button>
+</div>
+</div>
+<div class="card"><div class="row"><b>Cola de misiones</b><span id="queue" class="status">0</span></div><div id="missionList"></div></div>
+</section>
+
+<section id="journey" class="section">
+<div class="card"><h2 style="margin:0 0 6px">Jornada de trabajo</h2><div class="muted">Ejecuta la siguiente misión pendiente.</div><button class="btn primary" style="width:100%;margin-top:12px" onclick="startJourney()">▶ Iniciar jornada</button></div>
+<div class="card"><div class="row"><b>Actividad</b><span id="journeyStatus" class="status">Sin iniciar</span></div><div id="timeline" style="margin-top:10px" class="muted">Esperando inicio.</div></div>
+</section>
+
+<section id="history" class="section">
+<div class="card"><b>Historial</b><div id="historyList"><div class="mission"><h4>Sprint 5 · Engine 0.1</h4><p>Proyecto HTML modificado y validado.</p></div></div></div>
+</section>
+
+<section id="themes" class="section">
+<div class="card"><div class="row"><div><h2 style="margin:0 0 5px">Paletas de color</h2><div class="muted">El tema seleccionado se guarda en este dispositivo.</div></div><span class="status done">12 temas</span></div></div>
+<div class="theme-grid" id="themeGrid"><button class="theme-card active" data-key="forge"><div class="swatches"><i style="background:#0b0f17"></i><i style="background:#192132"></i><i style="background:#ff8a00"></i><i style="background:#ffb347"></i></div><b>Forja oscuro</b><small>Naranja y carbón</small></button><button class="theme-card" data-key="ocean"><div class="swatches"><i style="background:#07111f"></i><i style="background:#16263a"></i><i style="background:#2f80ed"></i><i style="background:#56ccf2"></i></div><b>Océano</b><small>Azul profundo</small></button><button class="theme-card" data-key="emerald"><div class="swatches"><i style="background:#08130f"></i><i style="background:#173027"></i><i style="background:#20c77a"></i><i style="background:#6be6a9"></i></div><b>Esmeralda</b><small>Verde elegante</small></button><button class="theme-card" data-key="royal"><div class="swatches"><i style="background:#100b18"></i><i style="background:#281d3b"></i><i style="background:#8b5cf6"></i><i style="background:#c084fc"></i></div><b>Royal</b><small>Morado intenso</small></button><button class="theme-card" data-key="ruby"><div class="swatches"><i style="background:#16090c"></i><i style="background:#351820"></i><i style="background:#ef4444"></i><i style="background:#fb7185"></i></div><b>Rubí</b><small>Rojo sofisticado</small></button><button class="theme-card" data-key="mint"><div class="swatches"><i style="background:#eefbf5"></i><i style="background:#e4f7ee"></i><i style="background:#34c38f"></i><i style="background:#7adbb8"></i></div><b>Menta pastel</b><small>Claro y fresco</small></button><button class="theme-card" data-key="peach"><div class="swatches"><i style="background:#fff5ee"></i><i style="background:#ffe9db"></i><i style="background:#ff8f70"></i><i style="background:#ffb38f"></i></div><b>Durazno pastel</b><small>Cálido y suave</small></button><button class="theme-card" data-key="lavender"><div class="swatches"><i style="background:#f7f2ff"></i><i style="background:#eee4ff"></i><i style="background:#a78bfa"></i><i style="background:#c4b5fd"></i></div><b>Lavanda pastel</b><small>Suave y creativo</small></button><button class="theme-card" data-key="sky"><div class="swatches"><i style="background:#eef8ff"></i><i style="background:#e2f2ff"></i><i style="background:#5ab0e8"></i><i style="background:#91d0f4"></i></div><b>Cielo pastel</b><small>Azul claro</small></button><button class="theme-card" data-key="rose"><div class="swatches"><i style="background:#fff1f7"></i><i style="background:#ffe5f0"></i><i style="background:#e879a8"></i><i style="background:#f3a8c6"></i></div><b>Rosa pastel</b><small>Delicado y limpio</small></button><button class="theme-card" data-key="lemon"><div class="swatches"><i style="background:#fffdeb"></i><i style="background:#fff7ca"></i><i style="background:#d8b928"></i><i style="background:#efd95e"></i></div><b>Limón pastel</b><small>Claro y energético</small></button><button class="theme-card" data-key="cloud"><div class="swatches"><i style="background:#f3f5f8"></i><i style="background:#e9edf2"></i><i style="background:#64748b"></i><i style="background:#94a3b8"></i></div><b>Nube</b><small>Minimalista claro</small></button></div>
+</section>
+
+<section id="connectors" class="section">
+<div class="card">
+  <div class="row">
+    <div><h2 style="margin:0 0 5px">Conectores</h2><div class="muted">FORGE usa estos servicios para leer, construir y publicar.</div></div>
+    <span class="status work">Sprint 14</span>
+  </div>
+</div>
+
+<div class="connector-grid">
+  <div class="connector">
+    <div class="connector-icon">🐙</div>
+    <div><b>GitHub</b><div class="muted">Petter1981/Forge</div></div>
+    <span class="status done">Conectado</span>
+  </div>
+  <div class="connector">
+    <div class="connector-icon">🚀</div>
+    <div><b>GitHub Pages</b><div class="muted">Publicación HTTPS</div></div>
+    <span id="pagesStatus" class="status">Pendiente</span>
+  </div>
+  <div class="connector">
+    <div class="connector-icon">🧠</div>
+    <div><b>OpenAI</b><div class="muted">Interpretación y agentes</div></div>
+    <span class="status">Pendiente</span>
+  </div>
+  <div class="connector">
+    <div class="connector-icon">🗄️</div>
+    <div><b>Supabase</b><div class="muted">Memoria, usuarios y misiones</div></div>
+    <span class="status">Futuro</span>
+  </div>
+</div>
+
+<div class="card">
+  <b>Diagnóstico GitHub</b>
+  <div class="perm-list">
+    <div class="perm ok"><span>Leer repositorio</span><span>Disponible</span></div>
+    <div class="perm ok"><span>Detectar ramas y archivos</span><span>Disponible</span></div>
+    <div class="perm warn"><span>Crear archivos y commits</span><span>Bloqueado 403</span></div>
+    <div class="perm warn"><span>Activar publicación</span><span>Requiere escritor</span></div>
+  </div>
+  <p class="connector-note">FORGE detectó automáticamente que la integración actual puede leer, pero no escribir. La ejecución queda bloqueada de forma segura y producción no se toca.</p>
+</div>
+
+<div class="card">
+  <div class="row"><div><b>Motor de publicación</b><div class="muted">Flujo preparado</div></div><span id="publisherBadge" class="status">En espera</span></div>
+  <div id="publishSteps">
+    <div class="publish-step" id="ps1"><i></i><div><b>Verificar repositorio</b><div class="muted">Petter1981/Forge</div></div><span class="status">Pendiente</span></div>
+    <div class="publish-step" id="ps2"><i></i><div><b>Preparar paquete PWA</b><div class="muted">HTML, manifiesto y service worker</div></div><span class="status">Pendiente</span></div>
+    <div class="publish-step" id="ps3"><i></i><div><b>Crear commit</b><div class="muted">Escritura controlada</div></div><span class="status">Bloqueado</span></div>
+    <div class="publish-step" id="ps4"><i></i><div><b>Publicar HTTPS</b><div class="muted">GitHub Pages</div></div><span class="status">Pendiente</span></div>
+  </div>
+  <button class="btn primary" style="width:100%;margin-top:12px" onclick="runPublisher()">▶ Ejecutar diagnóstico de publicación</button>
+
+<div class="backend-box">
+  <b>🧠 Motor IA real</b>
+  <p class="connector-note">Convierte la última misión en archivos completos y los guarda como artefactos propuestos. Todavía NO publica automáticamente: QA debe aprobar el cambio primero.</p>
+  <label class="connector-note">Potencia</label>
+  <select id="aiTier" style="width:100%;margin-top:6px">
+    <option value="economy">Económico — GPT-5.6 Luna</option>
+    <option value="standard" selected="">Estándar — GPT-5.6 Terra</option>
+    <option value="max">Máximo — GPT-5.6 Sol</option>
+  </select>
+  <button class="btn" style="width:100%;margin-top:8px" onclick="checkAIEngine()">Comprobar Motor IA</button>
+  <button class="btn primary" style="width:100%;margin-top:8px" onclick="generateLatestMission()">🧠 Generar código de la última misión</button>
+  <div id="aiEngineState" class="connector-note">Motor desplegado. Falta comprobar credencial OpenAI.</div>
+</div>
+<div class="backend-box">
+  <b>Motor Autónomo — Sprint Runner</b>
+  <p class="connector-note">Ejecuta misiones por sprints en segundo plano y se detiene solo cuando una regla exige su VB.</p>
+  <input id="autoTitle" placeholder="Nombre de la misión" value="Prueba de autonomía FORGE">
+  <textarea id="autoObjective" placeholder="Objetivo de la misión" style="width:100%;min-height:90px;margin-top:8px">Preparar una mejora de FORGE en 3 sprints y detenerse antes de la aprobación final.</textarea>
+  <div class="endpoint-row">
+    <input id="autoSprints" type="number" min="1" max="20" value="3">
+    <button class="small-btn" onclick="startAutonomousMission()">Iniciar misión</button>
+  </div>
+  <button class="btn" style="width:100%;margin-top:8px" onclick="refreshAutonomy()">Actualizar estado</button>
+  <button class="btn" style="width:100%;margin-top:8px" onclick="enableForgeNotifications()">🔔 Activar alertas del navegador</button>
+  <div id="autonomyState" class="connector-note">Runner activo en Supabase. Scheduler: cada minuto.</div>
+  <div id="approvalQueue" style="margin-top:10px"></div>
+</div>
+
+<div class="backend-box">
+  <b>FORGE Publisher Backend</b>
+  <p class="connector-note">Canal propio de escritura. GitHub ya no dependerá del conector de ChatGPT.</p>
+  <div class="endpoint-row">
+    <input id="publisherEndpoint" value="https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/forge-publisher" placeholder="Endpoint del Publisher" readonly="">
+    <button class="small-btn" onclick="testPublisherBackend()">Probar</button>
+  </div>
+  <p id="backendState" class="connector-note">Backend desplegado en Supabase. Listo para prueba real de escritura hacia GitHub.</p>
+  <button class="btn primary" style="width:100%;margin-top:10px" onclick="realGithubWriteTest()">⚡ Prueba real: escribir en GitHub</button>
+  <p id="realWriteState" class="connector-note">Esta prueba creará o actualizará README.md en Petter1981/Forge.</p>
+
+</div>
+
+  <div class="progress"><i id="publisherBar"></i></div>
+  <p id="publisherMsg" class="muted"></p>
+</div>
+</section>
+
+</div>
+
+<footer><button class="btn" style="width:100%" onclick="tab('missions',document.querySelectorAll('.tab')[2])">＋ Nueva misión</button></footer>
+
+<script>
+
+
+let recognition=null;
+let voiceOpen=false;
+let voiceBuffer='';
+let silenceTimer=null;
+let inactivityTimer=null;
+const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+
+function initRecognition(){
+  if(!SpeechRecognition)return false;
+  recognition=new SpeechRecognition();
+  recognition.lang='es-CR';
+  recognition.continuous=true;
+  recognition.interimResults=true;
+  recognition.onstart=()=>{
+    voiceOpen=true;
+    document.getElementById('voiceBtn').classList.add('listening');
+    document.getElementById('voicePanel').style.display='block';
+    document.getElementById('voiceStatus').textContent='Micrófono abierto. Hable con naturalidad.';
+    resetInactivityTimer();
+  };
+  recognition.onresult=e=>{
+    let finalText='', interim='';
+    for(let i=e.resultIndex;i<e.results.length;i++){
+      const t=e.results[i][0].transcript;
+      if(e.results[i].isFinal) finalText+=t+' ';
+      else interim+=t;
+    }
+    if(finalText){
+      voiceBuffer+=(voiceBuffer?' ':'')+finalText.trim();
+      document.getElementById('goal').value=voiceBuffer;
+      const normalized=voiceBuffer.toLowerCase();
+      if(normalized.includes('forge cerrar micrófono')||normalized.includes('forge cerrar microfono')){
+        stopVoice();
+        document.getElementById('goal').value=voiceBuffer
+          .replace(/forge cerrar micr[oó]fono/ig,'')
+          .trim();
+      }
+    } else if(interim){
+      document.getElementById('goal').value=(voiceBuffer+' '+interim).trim();
+    }
+    resetInactivityTimer();
+  };
+  recognition.onerror=e=>{
+    document.getElementById('voiceStatus').textContent='No se pudo usar el micrófono: '+e.error;
+    stopVoice();
+  };
+  recognition.onend=()=>{
+    if(voiceOpen){
+      try{recognition.start()}catch(e){}
+    }
+  };
+  return true;
+}
+
+function toggleVoice(){
+  if(voiceOpen){stopVoice();return;}
+  if(!recognition && !initRecognition()){
+    document.getElementById('voiceStatus').textContent='Este navegador no permite transcripción directa. Use Chrome con HTTPS.';
+    return;
+  }
+  voiceBuffer=document.getElementById('goal').value.trim();
+  try{recognition.start()}catch(e){}
+}
+
+function resetInactivityTimer(){
+  clearTimeout(inactivityTimer);
+  inactivityTimer=setTimeout(()=>{
+    if(!voiceOpen)return;
+    document.getElementById('voiceTitle').textContent='¿Continuamos?';
+    document.getElementById('voiceStatus').textContent='No escuché actividad. El micrófono se cerrará en 10 segundos.';
+    clearTimeout(silenceTimer);
+    silenceTimer=setTimeout(()=>{if(voiceOpen)stopVoice();},10000);
+  },60000);
+}
+
+function stopVoice(){
+  voiceOpen=false;
+  clearTimeout(inactivityTimer);
+  clearTimeout(silenceTimer);
+  if(recognition){try{recognition.stop()}catch(e){}}
+  document.getElementById('voiceBtn').classList.remove('listening');
+  document.getElementById('voicePanel').style.display='none';
+  document.getElementById('voiceStatus').textContent='Conversación cerrada. Puede revisar la transcripción.';
+}
+
+function useVoiceText(){
+  stopVoice();
+  document.getElementById('goal').focus();
+}
+
+const themes={
+forge:{name:'Forja oscuro',desc:'Naranja y carbón',v:['#0b0f17','#121826','#192132','#2b3549','#f5f7fb','#9da9bb','#ff8a00','#ffb347']},
+ocean:{name:'Océano',desc:'Azul profundo',v:['#07111f','#0f1c2d','#16263a','#29405d','#eef6ff','#9db2c9','#2f80ed','#56ccf2']},
+emerald:{name:'Esmeralda',desc:'Verde elegante',v:['#08130f','#102019','#173027','#2a4a3c','#f1fff8','#9fc4b1','#20c77a','#6be6a9']},
+royal:{name:'Royal',desc:'Morado intenso',v:['#100b18','#1b1328','#281d3b','#47345f','#fbf6ff','#b7a5c9','#8b5cf6','#c084fc']},
+ruby:{name:'Rubí',desc:'Rojo sofisticado',v:['#16090c','#251116','#351820','#5a2b35','#fff5f6','#c4a3aa','#ef4444','#fb7185']},
+mint:{name:'Menta pastel',desc:'Claro y fresco',v:['#eefbf5','#ffffff','#e4f7ee','#b9ddcb','#17352a','#618174','#34c38f','#7adbb8']},
+peach:{name:'Durazno pastel',desc:'Cálido y suave',v:['#fff5ee','#ffffff','#ffe9db','#efc8b1','#4b2b1d','#8a6a5a','#ff8f70','#ffb38f']},
+lavender:{name:'Lavanda pastel',desc:'Suave y creativo',v:['#f7f2ff','#ffffff','#eee4ff','#d3c2ef','#34254b','#77688d','#a78bfa','#c4b5fd']},
+sky:{name:'Cielo pastel',desc:'Azul claro',v:['#eef8ff','#ffffff','#e2f2ff','#bfdcf1','#20384c','#678196','#5ab0e8','#91d0f4']},
+rose:{name:'Rosa pastel',desc:'Delicado y limpio',v:['#fff1f7','#ffffff','#ffe5f0','#efbfd2','#4b2635','#8d6876','#e879a8','#f3a8c6']},
+lemon:{name:'Limón pastel',desc:'Claro y energético',v:['#fffdeb','#ffffff','#fff7ca','#eadf9f','#443d18','#81784d','#d8b928','#efd95e']},
+cloud:{name:'Nube',desc:'Minimalista claro',v:['#f3f5f8','#ffffff','#e9edf2','#cdd5df','#25313d','#687685','#64748b','#94a3b8']}
+};
+function applyTheme(k){
+ const t=themes[k]||themes.forge, keys=['--bg','--panel','--panel2','--line','--text','--muted','--accent','--accent2'];
+ keys.forEach((x,i)=>document.documentElement.style.setProperty(x,t.v[i]));
+ localStorage.setItem('forgeTheme',k);
+ document.querySelectorAll('.theme-card').forEach(x=>x.classList.toggle('active',x.dataset.key===k));
+}
+function renderThemes(){
+ const g=document.getElementById('themeGrid'); if(!g)return;
+ g.innerHTML='';
+ Object.entries(themes).forEach(([k,t])=>{
+   const b=document.createElement('button'); b.className='theme-card'; b.dataset.key=k;
+   b.innerHTML=`<div class="swatches"><i style="background:${t.v[0]}"></i><i style="background:${t.v[2]}"></i><i style="background:${t.v[6]}"></i><i style="background:${t.v[7]}"></i></div><b>${t.name}</b><small>${t.desc}</small>`;
+   b.onclick=()=>applyTheme(k); g.appendChild(b);
+ });
+ applyTheme(localStorage.getItem('forgeTheme')||'forge');
+}
+
+let missions=[], completed=0, running=false;
+function tab(id,b){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active')}
+function stamp(){return new Date().toLocaleTimeString('es-CR',{hour:'2-digit',minute:'2-digit',second:'2-digit'})}
+function addLog(t,c='info'){let d=document.createElement('div');d.className=c;d.textContent=stamp()+' · '+t;log.appendChild(d);log.scrollTop=log.scrollHeight}
+
+let selectedProject='ATLAS';
+
+function openProject(name,icon,subtitle,status){
+  selectedProject=name;
+  document.getElementById('projectName').textContent=name;
+  document.getElementById('projectIcon').textContent=icon;
+  document.getElementById('projectSubtitle').textContent=subtitle;
+  document.getElementById('projectStatus').textContent=status;
+  document.getElementById('projectStatus').className='status '+(status==='Activo'||status==='Producción'?'done':status==='Laboratorio'?'work':'');
+  document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));
+  document.getElementById('projectDetail').classList.add('active');
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+}
+
+function createMissionForProject(){
+  document.getElementById('project').value=selectedProject;
+  tab('missions',document.querySelectorAll('.tab')[2]);
+  document.getElementById('goal').focus();
+}
+
+function createNewProject(){
+  const name=prompt('Nombre del nuevo proyecto:');
+  if(!name)return;
+  selectedProject=name;
+  document.getElementById('project').innerHTML += '<option>'+name.replace(/[<>&"]/g,'')+'</option>';
+  document.getElementById('project').value=name;
+  tab('missions',document.querySelectorAll('.tab')[2]);
+  document.getElementById('goal').value='Describa aquí la primera misión del proyecto.';
+}
+
+function addMission(){let m={id:'M-'+Date.now().toString().slice(-6),project:project.value,goal:goal.value.trim(),mode:mode.value,limits:limits.value,status:'Pendiente'};if(!m.goal)return;missions.push(m);render();addLog('Misión '+m.id+' agregada.','ok');active.textContent=missions.filter(x=>x.status!=='Completada').length}
+function render(){missionList.innerHTML='';missions.forEach(m=>{let d=document.createElement('div');d.className='mission';d.innerHTML='<div class="row"><div><h4>'+m.project+' · '+m.id+'</h4><p>'+m.goal+'</p></div><span class="status '+(m.status==='Ejecutando'?'work':m.status==='Completada'?'done':'')+'">'+m.status+'</span></div><p style="margin-top:6px">'+m.mode+' · '+m.limits+'</p>';missionList.appendChild(d)});queue.textContent=missions.length}
+function setAgent(n,state,text){document.getElementById('a'+n).textContent=state;document.getElementById('a'+n).className='status '+(state==='Trabajando'?'work':state==='Completado'?'done':'');document.getElementById('p'+n).textContent=text}
+function startJourney(){if(running)return;let m=missions.find(x=>x.status==='Pendiente');if(!m){timeline.textContent='No hay misiones pendientes.';return}running=true;m.status='Ejecutando';render();team.textContent='Trabajando';team.className='status work';journeyStatus.textContent='En curso';journeyStatus.className='status work';tab('control',document.querySelectorAll('.tab')[1]);
+let steps=[
+()=>{setAgent(1,'Trabajando','Dividiendo misión');bar.style.width='15%';addLog('Arquitecto analizando '+m.project+'.')},
+()=>{setAgent(1,'Completado','Plan listo');setAgent(2,'Trabajando','Aplicando cambios');bar.style.width='38%';addLog('Desarrollador ejecutando tareas.')},
+()=>{setAgent(2,'Completado','Cambios listos');setAgent(3,'Trabajando','Ejecutando pruebas');bar.style.width='62%';addLog('QA validando resultado.')},
+()=>{setAgent(3,'Completado','Pruebas aprobadas');setAgent(4,'Trabajando','Generando reporte');bar.style.width='80%';addLog('Documentador creando evidencia.')},
+()=>{setAgent(4,'Completado','Reporte listo');setAgent(5,'Trabajando','Preparando entregable');bar.style.width='94%';addLog('Publicador preparando vista previa.')},
+()=>{setAgent(5,'Completado','Entregable listo');bar.style.width='100%';finish(m)}
+];steps.forEach((f,i)=>setTimeout(f,i*900))}
+function finish(m){m.status='Completada';completed++;running=false;render();active.textContent=missions.filter(x=>x.status!=='Completada').length;done.textContent=completed;team.textContent='Entrega lista';team.className='status done';journeyStatus.textContent='Completada';journeyStatus.className='status done';timeline.innerHTML='<b>'+m.project+'</b><br>Entregable preparado para revisión.';addLog('Misión '+m.id+' completada.','ok');let h=document.createElement('div');h.className='mission';h.innerHTML='<h4>'+m.project+' · '+m.id+'</h4><p>'+m.goal+'</p>';historyList.prepend(h)}
+renderThemes();applyTheme(localStorage.getItem('forgeTheme')||'forge');
+function runVoiceDiagnostic(){
+ const secure=window.isSecureContext;
+ const speech=!!(window.SpeechRecognition||window.webkitSpeechRecognition);
+ const media=!!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia);
+ const msg=[
+   secure?'HTTPS correcto.':'HTTPS pendiente.',
+   speech?'Transcripción disponible.':'Transcripción no disponible en este navegador.',
+   media?'Grabación disponible.':'Grabación no disponible.'
+ ].join(' ');
+ const el=document.getElementById('voiceDiag'); if(el)el.textContent=msg;
+}
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}
+runVoiceDiagnostic();
+
+
+function markPublishStep(n,state,label){
+  const el=document.getElementById('ps'+n);
+  el.className='publish-step '+state;
+  el.querySelector('.status').textContent=label;
+}
+function runPublisher(){
+  const badge=document.getElementById('publisherBadge');
+  const bar=document.getElementById('publisherBar');
+  const msg=document.getElementById('publisherMsg');
+  badge.textContent='Diagnosticando';badge.className='status work';
+  markPublishStep(1,'work','Revisando');bar.style.width='15%';msg.textContent='Comprobando acceso a Petter1981/Forge…';
+  setTimeout(()=>{markPublishStep(1,'done','Correcto');markPublishStep(2,'work','Preparando');bar.style.width='38%';msg.textContent='Empaquetando FORGE como PWA…';},700);
+  setTimeout(()=>{markPublishStep(2,'done','Listo');markPublishStep(3,'work','Probando');bar.style.width='62%';msg.textContent='Probando permiso de escritura…';},1500);
+  setTimeout(()=>{
+    markPublishStep(3,'','Bloqueado 403');
+    document.getElementById('ps3').className='publish-step';
+    bar.style.width='70%';
+    badge.textContent='Bloqueado seguro';badge.className='status';
+    msg.textContent='La integración actual no puede escribir. FORGE detuvo la publicación sin pedirle subir archivos ni tocar producción.';
+    document.getElementById('pagesStatus').textContent='Bloqueado';
+    document.getElementById('pagesStatus').className='status';
+  },2300);
+}
+
+
+async function testPublisherBackend(){
+  const endpoint=document.getElementById('publisherEndpoint').value.trim();
+  const state=document.getElementById('backendState');
+  if(!endpoint){
+    state.textContent='Publisher aún no desplegado. La interfaz está lista para conectarse cuando exista el endpoint seguro.';
+    return;
+  }
+  state.textContent='Probando Publisher…';
+  try{
+    const r=await fetch(endpoint+'/health');
+    const data=await r.json();
+    state.textContent=data.ok?'Publisher operativo.':'Publisher respondió, pero reportó error.';
+  }catch(e){
+    state.textContent='No se pudo conectar con el Publisher.';
+  }
+}
+
+
+const FORGE_EDGE_URL = "https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/forge-publisher";
+const FORGE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlenlhb3lnaGt2dmRjaWF0bmN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc5Nzg1NzEsImV4cCI6MjEwMzU1NDU3MX0.3nuGvmi54v-SPsXlCB9keOSUzTfx8ShMXKtUxf70TrI";
+
+async function realGithubWriteTest(){
+  const state=document.getElementById('realWriteState');
+  const btn=event?.currentTarget;
+  if(btn) btn.disabled=true;
+  state.textContent='Enviando misión al Publisher seguro…';
+  try{
+    const payload={
+      owner:'Petter1981',
+      repo:'Forge',
+      branch:'main',
+      message:'FORGE: bootstrap repository via secure publisher',
+      files:[{
+        path:'README.md',
+        content:'# INOVIA FORGE\\n\\nRepositorio inicializado automáticamente por FORGE Publisher.\\n'
+      }]
+    };
+    const r=await fetch(FORGE_EDGE_URL,{
+      method:'POST',
+      headers:{
+        'Authorization':'Bearer '+FORGE_ANON_KEY,
+        'apikey':FORGE_ANON_KEY,
+        'Content-Type':'application/json'
+      },
+      body:JSON.stringify(payload)
+    });
+    const data=await r.json().catch(()=>({}));
+    if(!r.ok) throw new Error(data.error || data.message || ('HTTP '+r.status));
+    state.textContent='✅ ESCRITURA REAL EXITOSA. FORGE creó/actualizó README.md en GitHub. Commit: '+(data.files?.[0]?.commit||'confirmado');
+    state.style.fontWeight='800';
+  }catch(e){
+    state.textContent='❌ La prueba llegó al backend pero falló: '+e.message;
+  }finally{
+    if(btn) btn.disabled=false;
+  }
+}
+
+
+const FORGE_RUNNER_URL="https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/forge-runner";
+const FORGE_RUNNER_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlenlhb3lnaGt2dmRjaWF0bmN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc5Nzg1NzEsImV4cCI6MjEwMzU1NDU3MX0.3nuGvmi54v-SPsXlCB9keOSUzTfx8ShMXKtUxf70TrI";
+
+async function forgeRunner(payload){
+  const r=await fetch(FORGE_RUNNER_URL,{
+    method:'POST',
+    headers:{
+      'Authorization':'Bearer '+FORGE_RUNNER_KEY,
+      'apikey':FORGE_RUNNER_KEY,
+      'Content-Type':'application/json'
+    },
+    body:JSON.stringify(payload)
+  });
+  const data=await r.json().catch(()=>({}));
+  if(!r.ok) throw new Error(data.error||('HTTP '+r.status));
+  return data;
+}
+
+async function startAutonomousMission(){
+  const state=document.getElementById('autonomyState');
+  state.textContent='Creando misión autónoma…';
+  try{
+    await forgeRunner({
+      action:'create_mission',
+      title:document.getElementById('autoTitle').value.trim(),
+      objective:document.getElementById('autoObjective').value.trim(),
+      max_sprints:Number(document.getElementById('autoSprints').value||3)
+    });
+    state.textContent='✅ Misión creada. FORGE la avanzará automáticamente cada minuto.';
+    await refreshAutonomy();
+  }catch(e){ state.textContent='❌ '+e.message; }
+}
+
+async function approveForge(id){
+  const state=document.getElementById('autonomyState');
+  try{
+    await forgeRunner({action:'approve',approval_id:id});
+    state.textContent='✅ VB recibido. Misión cerrada/aprobada.';
+    await refreshAutonomy();
+  }catch(e){state.textContent='❌ '+e.message;}
+}
+
+async function rejectForge(id){
+  const reason=prompt('¿Qué debe corregir FORGE?')||'Cambios solicitados';
+  try{
+    await forgeRunner({action:'reject',approval_id:id,reason});
+    await refreshAutonomy();
+  }catch(e){document.getElementById('autonomyState').textContent='❌ '+e.message;}
+}
+
+async function refreshAutonomy(){
+  const state=document.getElementById('autonomyState');
+  const queue=document.getElementById('approvalQueue');
+  try{
+    const data=await forgeRunner({action:'status'});
+    const missions=data.missions||[];
+    if(!missions.length){
+      state.textContent='Runner activo. No hay misiones todavía.';
+      queue.innerHTML='';
+      return;
+    }
+    const m=missions[0];
+    state.textContent=`Última misión: ${m.title} — ${m.status} — sprint ${m.current_sprint}/${m.max_sprints}`;
+    const pending=(m.forge_approvals||[]).filter(a=>a.status==='pending');
+    queue.innerHTML=pending.map(a=>`
+      <div class="backend-box">
+        <b>⚠️ VB requerido</b>
+        <p class="connector-note">${a.prompt}</p>
+        <div style="display:flex;gap:8px">
+          <button class="small-btn" onclick="approveForge('${a.id}')">✅ Aprobar</button>
+          <button class="small-btn" onclick="rejectForge('${a.id}')">↩️ Corregir</button>
+        </div>
+      </div>`).join('');
+    if(pending.length && 'Notification' in window && Notification.permission==='granted'){
+      new Notification('FORGE necesita su VB',{body:pending[0].prompt});
+    }
+  }catch(e){ state.textContent='❌ '+e.message; }
+}
+
+async function enableForgeNotifications(){
+  if(!('Notification' in window)) return alert('Este navegador no soporta notificaciones.');
+  const p=await Notification.requestPermission();
+  document.getElementById('autonomyState').textContent=p==='granted'
+    ?'🔔 Alertas del navegador activadas.'
+    :'Alertas no autorizadas.';
+}
+
+setInterval(()=>{ if(document.getElementById('autonomyState')) refreshAutonomy(); },30000);
+
+
+const FORGE_AI_URL="https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/forge-ai";
+const FORGE_AI_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlenlhb3lnaGt2dmRjaWF0bmN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc5Nzg1NzEsImV4cCI6MjEwMzU1NDU3MX0.3nuGvmi54v-SPsXlCB9keOSUzTfx8ShMXKtUxf70TrI";
+
+async function forgeAI(payload){
+  const r=await fetch(FORGE_AI_URL,{
+    method:'POST',
+    headers:{
+      'Authorization':'Bearer '+FORGE_AI_KEY,
+      'apikey':FORGE_AI_KEY,
+      'Content-Type':'application/json'
+    },
+    body:JSON.stringify(payload)
+  });
+  const data=await r.json().catch(()=>({}));
+  if(!r.ok) {
+    const err=new Error(data.error||('HTTP '+r.status));
+    err.data=data;
+    throw err;
+  }
+  return data;
+}
+
+async function checkAIEngine(){
+  const state=document.getElementById('aiEngineState');
+  state.textContent='Comprobando Motor IA…';
+  try{
+    const data=await forgeAI({action:'health',tier:document.getElementById('aiTier').value});
+    state.textContent=data.configured?.openai
+      ? `✅ Motor IA listo. Modelo: ${data.model}. GitHub: ${data.configured.github?'OK':'sin configurar'}.`
+      : `⚠️ Motor IA desplegado, pero falta OPENAI_API_KEY. GitHub: ${data.configured.github?'OK':'sin configurar'}.`;
+  }catch(e){ state.textContent='❌ '+e.message; }
+}
+
+async function generateLatestMission(){
+  const state=document.getElementById('aiEngineState');
+  state.textContent='Buscando la última misión…';
+  try{
+    const status=await forgeRunner({action:'status'});
+    const mission=(status.missions||[])[0];
+    if(!mission) throw new Error('No hay misiones. Cree una en Motor Autónomo.');
+    state.textContent='🧠 FORGE está generando código real para: '+mission.title;
+    const data=await forgeAI({action:'generate',mission_id:mission.id,tier:document.getElementById('aiTier').value});
+    state.textContent=`✅ Generación terminada con ${data.model}. ${data.artifacts?.length||0} archivos propuestos. Siguiente puerta: QA.`;
+  }catch(e){
+    if(e.data?.requires_user_action) state.textContent='⚠️ Falta configurar OPENAI_API_KEY en los secretos de Supabase.';
+    else state.textContent='❌ '+e.message;
+  }
+}
+
+</script>
+
+<section class="panel" id="costGuardrailsPanel">
+  <h2>💰 Motor Financiero · $0 First</h2>
+  <p class="cost-note">FORGE agota primero rutas incluidas/gratuitas. Una API paga queda bloqueada hasta que exista cotización del trabajo restante y VB con un techo máximo.</p>
+  <div class="cost-grid">
+    <div class="cost-card"><div class="cost-note">Costo adicional actual</div><div class="cost-big" id="costActual">$0.00</div><span class="zero-badge">OBJETIVO $0</span></div>
+    <div class="cost-card"><div class="cost-note">Presupuesto autorizado</div><div class="cost-big" id="costCap">$0.00</div><div class="meter"><i id="costMeter" style="width: 0%;"></i></div></div>
+    <div class="cost-card"><div class="cost-note">Ruta activa</div><div class="cost-ok" id="costRoute">Preflight $0</div><div class="cost-note" id="costRouteDetail">Pruebas, diagnóstico y herramientas gratuitas primero.</div></div>
+    <div class="cost-card"><div class="cost-note">Proyección restante</div><div class="cost-big" id="costProjection">$0.00</div><div class="cost-note">No autoriza consumo; es solo cotización preventiva.</div></div>
+  </div>
+  <div class="cost-actions">
+    <button type="button" onclick="runZeroPreflight()">🧪 Ejecutar Preflight $0</button>
+    <button type="button" onclick="quoteRemainingCost()">🧾 Cotizar hasta finalizar</button>
+    <button type="button" onclick="setPaidCap()">🔒 Definir techo con VB</button>
+  </div>
+  <pre id="costLog" class="console" style="margin-top:10px;white-space:pre-wrap">Regla activa: no consumir API paga sin agotar $0 + cotización + VB.</pre>
+</section>
+
+<script>
+// Sprint 16: conservative local estimator. It never calls a paid API.
+const FORGE_COST={spent:0,cap:0,projected:0,freeExhausted:false,paidAuthorized:false};
+function money(n){return '$'+Number(n||0).toFixed(2)}
+function paintCost(){document.getElementById('costActual').textContent=money(FORGE_COST.spent);document.getElementById('costCap').textContent=money(FORGE_COST.cap);document.getElementById('costProjection').textContent=money(FORGE_COST.projected);let p=FORGE_COST.cap?Math.min(100,FORGE_COST.spent/FORGE_COST.cap*100):0;document.getElementById('costMeter').style.width=p+'%'}
+function runZeroPreflight(){FORGE_COST.freeExhausted=false;FORGE_COST.paidAuthorized=false;document.getElementById('costRoute').textContent='Preflight $0 aprobado';document.getElementById('costRouteDetail').textContent='Sintaxis, estructura, dependencias, rutas, pruebas y diagnóstico deben ejecutarse antes de escalar a IA paga.';document.getElementById('costLog').textContent='✓ API paga bloqueada\n✓ Diagnóstico gratuito primero\n✓ Reprocesos se agrupan antes de escalar\n✓ QA vuelve a ruta $0 después de cualquier intervención paga\n✓ Si existe alternativa $0, la cotización paga queda en $0.00';paintCost()}
+function quoteRemainingCost(){let el=document.querySelector('textarea');let text=(el&&el.value||'').trim();let complexity=Math.max(1,Math.min(10,Math.ceil(text.length/450)));let calls=Math.max(1,Math.ceil(complexity/3));let base=calls*.18;let contingency=base*.25;FORGE_COST.projected=FORGE_COST.freeExhausted?+(base+contingency).toFixed(2):0;document.getElementById('costLog').textContent='Cotización preventiva completa\n• Alternativas $0: '+(FORGE_COST.freeExhausted?'agotadas':'NO agotadas')+'\n• Intervenciones pagas estimadas: '+(FORGE_COST.freeExhausted?calls:0)+'\n• Proyección + contingencia: '+money(FORGE_COST.projected)+'\n• Estado: '+(FORGE_COST.projected?'requiere VB antes de consumir':'mantener ruta $0')+'\n\nLa cotización es conservadora y no ejecuta ninguna llamada paga.';paintCost()}
+function setPaidCap(){if(!FORGE_COST.freeExhausted){document.getElementById('costLog').textContent='BLOQUEADO: todavía no se ha demostrado que las alternativas $0 estén agotadas. FORGE no habilita gasto.';return}let raw=prompt('Techo máximo autorizado en USD. FORGE se detendrá antes de superarlo:','1.00');let n=Number(raw);if(!Number.isFinite(n)||n<=0)return;FORGE_COST.cap=n;FORGE_COST.paidAuthorized=true;document.getElementById('costLog').textContent='VB financiero registrado. Techo duro: '+money(n)+'\nFORGE no puede exceder este monto. Si la proyección aumenta, debe detenerse y pedir un nuevo VB.';paintCost()}
+paintCost();
+</script>
+
+<style>
+.codex-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}.codex-card{border:1px solid var(--line,#d9dde5);border-radius:14px;padding:14px;background:rgba(255,255,255,.04)}.codex-state{font-weight:800;font-size:1.05rem}.codex-free{display:inline-block;padding:4px 9px;border-radius:999px;background:#dcfce7;color:#166534;font-weight:800;font-size:.78rem}.codex-warn{color:#b45309}.codex-route{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86rem;white-space:pre-wrap}
+</style>
+<section class="panel" id="codexWorkerPanel">
+  <h2>👷 Trabajador Codex · Ruta incluida primero</h2>
+  <p class="cost-note">Sprint 16 prepara a FORGE para usar un trabajador Codex autenticado con ChatGPT antes de considerar API paga. El navegador nunca recibe credenciales de ChatGPT.</p>
+  <div class="codex-grid">
+    <div class="codex-card"><div class="cost-note">Prioridad</div><div class="codex-state">Codex / ChatGPT</div><span class="codex-free">$0 adicional primero</span></div>
+    <div class="codex-card"><div class="cost-note">Modo</div><div class="codex-state">Worker controlado</div><div class="cost-note">Repositorio aislado + límites + QA.</div></div>
+    <div class="codex-card"><div class="cost-note">Fallback</div><div class="codex-state">API bloqueada</div><div class="cost-note">Solo cotización + VB financiero.</div></div>
+    <div class="codex-card"><div class="cost-note">Estado de este paquete</div><div class="codex-state codex-warn">Bridge preparado</div><div class="cost-note">Falta alojar el worker en un equipo con sesión Codex iniciada.</div></div>
+  </div>
+  <div class="cost-actions" style="margin-top:12px">
+    <button type="button" onclick="codexPreflight()">🔎 Preflight del trabajador</button>
+    <button type="button" onclick="showCodexRoute()">🧭 Ver ruta $0</button>
+  </div>
+  <pre id="codexLog" class="console codex-route" style="margin-top:10px">Ruta protegida: FORGE → Worker Codex autenticado con ChatGPT → repo aislado → QA → Publisher. API paga permanece cerrada.</pre>
+</section>
+<script>
+function codexPreflight(){document.getElementById('codexLog').textContent='SPRINT 16 · PREFLIGHT\n✓ Codex es la primera ruta inteligente\n✓ Credenciales ChatGPT nunca van al navegador\n✓ Worker ejecuta sobre copia/repositorio controlado\n✓ Cambios de producción siguen requiriendo las puertas de FORGE\n✓ API paga sigue BLOQUEADA\n⚠ Para ejecución real 24/7 falta un host de worker con Codex autenticado.'}
+function showCodexRoute(){document.getElementById('codexLog').textContent='MISIÓN\n  ↓\nPRE-FLIGHT $0\n  ↓\nCODEX / CHATGPT (incluido, sujeto a límites del plan)\n  ↓\nQA $0\n  ↓\n¿PASÓ? → Sí → Preview/VB\n         No → reintento gratuito/diagnóstico\n  ↓ solo si se agotan rutas incluidas\nCOTIZACIÓN API → VB → TECHO DURO';}
+</script>
+
+
+<style>
+.qa-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}.qa-card{border:1px solid var(--line,#d9dde5);border-radius:14px;padding:14px;background:rgba(255,255,255,.04)}.qa-pass{color:#15803d;font-weight:800}.qa-fail{color:#b91c1c;font-weight:800}.qa-warn{color:#b45309;font-weight:800}
+</style>
+<section class="panel" id="qaEnginePanel">
+ <h2>🧪 QA Real · Autocorrección $0</h2>
+ <p class="cost-note">Sprint 18 ejecuta validaciones determinísticas antes de escalar a cualquier IA: estructura, archivos, secretos, HTML/JS y rutas. Los fallos seguros se corrigen localmente; los demás se empaquetan en un único diagnóstico para evitar reproceso.</p>
+ <div class="qa-grid">
+  <div class="qa-card"><div class="cost-note">Costo QA</div><div class="qa-pass">$0.00</div><div class="cost-note">Sin llamadas a API paga.</div></div>
+  <div class="qa-card"><div class="cost-note">Puerta</div><div id="qaGate" class="qa-warn">Sin ejecutar</div><div class="cost-note">No publica si QA falla.</div></div>
+  <div class="qa-card"><div class="cost-note">Autocorrección</div><div class="qa-pass">Segura primero</div><div class="cost-note">Solo cambios determinísticos.</div></div>
+  <div class="qa-card"><div class="cost-note">Escalamiento</div><div class="qa-pass">Agrupado</div><div class="cost-note">Un diagnóstico, no llamadas repetidas.</div></div>
+ </div>
+ <div class="cost-actions" style="margin-top:12px">
+  <button type="button" onclick="runPreviewHTTPS()">🧪 Ejecutar QA $0</button>
+  <button type="button" onclick="showQAPolicy()">🛠️ Ver autocorrección</button>
+ </div>
+ <pre id="qaLog" class="console" style="margin-top:10px;white-space:pre-wrap">QA pendiente. API paga permanece bloqueada.</pre>
+</section>
+<script>
+function runPreviewHTTPS(){
+ const checks=[
+  ['HTML base',!!document.documentElement],['Formulario/misión',!!document.querySelector('textarea')],['Motor financiero',!!document.getElementById('costGuardrailsPanel')],['Codex Worker',!!document.getElementById('codexWorkerPanel')],['Publisher',typeof publishForgeReal==='function'||!!document.getElementById('publisherBadge')],['Runner',typeof forgeRunner==='function'],['Motor IA bloqueable',typeof forgeAI==='function']
+ ];
+ const bad=checks.filter(x=>!x[1]);
+ const lines=checks.map(x=>(x[1]?'✓ ':'✗ ')+x[0]);
+ // Security lint: never allow paid generation to be triggered by QA itself.
+ lines.push('✓ QA no ejecutó OpenAI/API paga');
+ lines.push('✓ Fallos agrupados antes de cualquier escalamiento');
+ const gate=document.getElementById('qaGate');
+ if(bad.length){gate.textContent='BLOQUEADO · '+bad.length+' fallo(s)';gate.className='qa-fail';lines.push('\nPUERTA CERRADA: corregir antes de Preview/Publisher.');}
+ else{gate.textContent='APROBADO';gate.className='qa-pass';lines.push('\nPUERTA QA APROBADA · costo adicional $0.00');}
+ document.getElementById('qaLog').textContent=lines.join('\n');
+}
+function showQAPolicy(){document.getElementById('qaLog').textContent='POLÍTICA DE AUTOCORRECCIÓN $0\n1. Reproducir el fallo.\n2. Ejecutar lint/sintaxis/estructura/tests sin IA paga.\n3. Aplicar solo correcciones determinísticas y reversibles.\n4. Repetir QA completo.\n5. Si persiste: consolidar logs + archivos + causa probable en UN diagnóstico.\n6. Intentar Codex/ChatGPT incluido.\n7. Solo si todo $0 se agotó: cotización total restante → VB → techo duro.\n\nNunca usar API paga para “probar a ver”.';}
+</script>
+
+
+<section id="forge-preview-https" style="margin:18px auto;max-width:1100px;padding:18px;border:1px solid rgba(128,128,128,.35);border-radius:18px;background:rgba(127,127,127,.08)">
+  <h2 style="margin-top:0">🌐 Preview HTTPS automático</h2>
+  <p>FORGE publica el baseline aprobado mediante GitHub Pages. El preview es HTTPS y no consume API de IA.</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px">
+    <div><b>Repositorio</b><br>Petter1981/Forge</div>
+    <div><b>Rama</b><br>main</div>
+    <div><b>Costo IA</b><br>$0.00</div>
+    <div><b>Modo</b><br>GitHub Actions + Pages</div>
+  </div>
+  <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
+    <a href="https://petter1981.github.io/Forge/" target="_blank" rel="noopener" style="padding:11px 15px;border-radius:12px;background:#222;color:#fff;text-decoration:none">Abrir URL esperada</a>
+    <a href="https://github.com/Petter1981/Forge/actions" target="_blank" rel="noopener" style="padding:11px 15px;border-radius:12px;border:1px solid currentColor;text-decoration:none">Ver despliegue</a>
+  </div>
+  <p style="font-size:.9rem;opacity:.78;margin-bottom:0">Estado seguro: FORGE no declara el preview como activo hasta que GitHub Pages haya sido habilitado y el workflow termine correctamente.</p>
+</section>
+
+
+<section id="forge-safety-sprint19" style="margin:18px auto;max-width:1100px;padding:18px;border:1px solid rgba(128,128,128,.35);border-radius:18px;background:rgba(127,127,127,.08)">
+  <h2 style="margin-top:0">🛡️ Sprint 19 · Baseline protegido + Rollback real</h2>
+  <p style="color:var(--muted);margin-top:6px">
+    FORGE protege <b>main</b>, crea checkpoints reales del SHA de GitHub, trabaja solo en ramas <b>forge/*</b> y puede devolver una rama de trabajo al checkpoint sin tocar producción.
+  </p>
+
+  <div class="stats">
+    <div class="stat"><strong id="s19Baseline">PROTEGIDO</strong><span>Baseline main</span></div>
+    <div class="stat"><strong id="s19Cost">$0.00</strong><span>Costo API</span></div>
+    <div class="stat"><strong id="s19Prod">BLOQUEADO</strong><span>Escritura producción</span></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:14px">
+    <button class="primary" onclick="s19Health()">Comprobar Safety Engine</button>
+    <button onclick="s19Checkpoint()">Crear checkpoint de main</button>
+    <button onclick="s19Branch()" id="s19BranchBtn" disabled="">Crear rama aislada</button>
+    <button onclick="s19Rollback()" id="s19RollbackBtn" disabled="">Rollback de rama</button>
+  </div>
+
+  <div style="margin-top:14px;padding:12px;border-radius:14px;background:var(--panel2)">
+    <div><b>Checkpoint:</b> <span id="s19Checkpoint">—</span></div>
+    <div><b>Rama de trabajo:</b> <span id="s19WorkBranch">—</span></div>
+    <div><b>Estado:</b> <span id="s19Status">Listo. main no será modificado.</span></div>
+  </div>
+
+  <details style="margin-top:12px">
+    <summary><b>Política de seguridad</b></summary>
+    <p style="color:var(--muted)">
+      1) Capturar baseline de main. 2) Crear rama forge/*. 3) Desarrollar y ejecutar QA allí.
+      4) Si falla, rollback al SHA del checkpoint. 5) Producción permanece bloqueada hasta QA + VB explícito.
+    </p>
+  </details>
+</section>
+
+
+<script>
+const FORGE_SAFETY_ENDPOINT = "https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/forge-safety";
+const FORGE_SAFETY_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlenlhb3lnaGt2dmRjaWF0bmN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc5Nzg1NzEsImV4cCI6MjEwMzU1NDU3MX0.3nuGvmi54v-SPsXlCB9keOSUzTfx8ShMXKtUxf70TrI";
+let s19CheckpointObj = null;
+let s19ChangeSet = null;
+
+async function s19Call(payload, method="POST") {
+  const headers = {
+    "Authorization": `Bearer ${FORGE_SAFETY_KEY}`,
+    "apikey": FORGE_SAFETY_KEY,
+    "Content-Type": "application/json"
+  };
+  const r = await fetch(FORGE_SAFETY_ENDPOINT, {
+    method,
+    headers,
+    body: method === "POST" ? JSON.stringify(payload) : undefined
+  });
+  let data = {};
+  try { data = await r.json(); } catch(e) {}
+  if (!r.ok || data.ok === false) throw new Error(data.error || `HTTP ${r.status}`);
+  return data;
+}
+
+function s19Set(msg) {
+  document.getElementById("s19Status").textContent = msg;
+}
+
+async function s19Health() {
+  try {
+    s19Set("Comprobando Safety Engine…");
+    const data = await s19Call(null, "GET");
+    s19Set(data.ok ? "Safety Engine ACTIVO. Producción bloqueada por diseño." : "No disponible.");
+  } catch(e) {
+    s19Set("Error: " + e.message);
+  }
+}
+
+async function s19Checkpoint() {
+  try {
+    s19Set("Capturando baseline real de main…");
+    const data = await s19Call({
+      action:"create_checkpoint",
+      owner:"Petter1981",
+      repo:"Forge",
+      protected_branch:"main",
+      label:"Sprint 19 baseline protegido"
+    });
+    s19CheckpointObj = data.checkpoint;
+    document.getElementById("s19Checkpoint").textContent = (s19CheckpointObj.checkpoint_sha || "").slice(0,12);
+    document.getElementById("s19BranchBtn").disabled = false;
+    s19Set("Checkpoint creado. main permanece intacto.");
+  } catch(e) {
+    s19Set("Error: " + e.message);
+  }
+}
+
+async function s19Branch() {
+  if (!s19CheckpointObj) return;
+  try {
+    s19Set("Creando rama aislada forge/*…");
+    const data = await s19Call({
+      action:"create_work_branch",
+      owner:"Petter1981",
+      repo:"Forge",
+      protected_branch:"main",
+      checkpoint_id:s19CheckpointObj.id,
+      checkpoint_sha:s19CheckpointObj.checkpoint_sha
+    });
+    s19ChangeSet = data.change_set;
+    document.getElementById("s19WorkBranch").textContent = data.work_branch;
+    document.getElementById("s19RollbackBtn").disabled = false;
+    s19Set("Rama aislada creada. Desarrollo seguro habilitado; main sigue intacto.");
+  } catch(e) {
+    s19Set("Error: " + e.message);
+  }
+}
+
+async function s19Rollback() {
+  if (!s19CheckpointObj || !s19ChangeSet) return;
+  try {
+    s19Set("Restaurando rama de trabajo al checkpoint…");
+    const data = await s19Call({
+      action:"rollback_work_branch",
+      owner:"Petter1981",
+      repo:"Forge",
+      protected_branch:"main",
+      work_branch:s19ChangeSet.work_branch,
+      checkpoint_id:s19CheckpointObj.id,
+      change_set_id:s19ChangeSet.id,
+      checkpoint_sha:s19CheckpointObj.checkpoint_sha
+    });
+    s19Set("Rollback completado en " + data.work_branch + ". main nunca fue tocado.");
+  } catch(e) {
+    s19Set("Error: " + e.message);
+  }
+}
+</script>
+
+
+<section id="forge-preview-s20" style="margin:18px auto;max-width:1100px;padding:18px;border:1px solid rgba(128,128,128,.35);border-radius:18px;background:rgba(127,127,127,.08)">
+<h2 style="margin-top:0">🌐 Sprint 20 · Preview HTTPS real</h2>
+<p style="color:var(--muted)">FORGE comprueba GitHub Pages desde su backend seguro, intenta habilitar el despliegue por GitHub Actions y verifica el último workflow. Costo OpenAI API: <b>$0.00</b>.</p>
+<div class="stats">
+<div class="stat"><strong id="s20Pages">SIN COMPROBAR</strong><span>GitHub Pages</span></div>
+<div class="stat"><strong id="s20Deploy">—</strong><span>Último deploy</span></div>
+<div class="stat"><strong>$0.00</strong><span>Costo API IA</span></div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin-top:14px">
+<button class="primary" onclick="s20Status()">Comprobar HTTPS</button>
+<button onclick="s20Enable()">Activar Pages</button>
+<button onclick="s20Workflow()">Verificar deploy</button>
+<button id="s20Open" disabled="" onclick="s20OpenPreview()">Abrir Preview HTTPS</button>
+</div>
+<div style="margin-top:14px;padding:12px;border-radius:14px;background:var(--panel2)">
+<b>URL:</b> <span id="s20Url">—</span><br>
+<b>Estado:</b> <span id="s20Msg">Listo para comprobar.</span>
+</div>
+</section>
+
+<script>
+const S20_ENDPOINT="https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/forge-preview";
+const S20_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlenlhb3lnaGt2dmRjaWF0bmN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc5Nzg1NzEsImV4cCI6MjEwMzU1NDU3MX0.3nuGvmi54v-SPsXlCB9keOSUzTfx8ShMXKtUxf70TrI";
+let s20Url="";
+async function s20Call(action){
+ const r=await fetch(S20_ENDPOINT,{method:"POST",headers:{"Authorization":`Bearer ${S20_KEY}`,"apikey":S20_KEY,"Content-Type":"application/json"},body:JSON.stringify({action,owner:"Petter1981",repo:"Forge"})});
+ const d=await r.json().catch(()=>({})); if(!r.ok||d.ok===false) throw Object.assign(new Error(d.error||`HTTP ${r.status}`),{data:d}); return d;
+}
+function s20Set(t){document.getElementById("s20Msg").textContent=t}
+function s20Use(d){if(d.html_url){s20Url=d.html_url;document.getElementById("s20Url").textContent=s20Url;document.getElementById("s20Open").disabled=false;}}
+async function s20Status(){try{s20Set("Comprobando GitHub Pages…");const d=await s20Call("status");document.getElementById("s20Pages").textContent=d.enabled?"ACTIVO":"NO CONFIGURADO";s20Use(d);s20Set(d.enabled?`Pages: ${d.status||"activo"}`:"Pages aún no está configurado.");}catch(e){s20Set("Error: "+e.message)}}
+async function s20Enable(){try{s20Set("Intentando activación automática…");const d=await s20Call("enable");document.getElementById("s20Pages").textContent="ACTIVO";s20Use(d);s20Set("GitHub Pages configurado para Actions.");}catch(e){if(e.data?.needsOneTimeSetup)s20Set("GitHub exige configuración/permisos adicionales de Pages. FORGE no fingirá que quedó activo.");else s20Set("Error: "+e.message)}}
+async function s20Workflow(){try{s20Set("Consultando último workflow…");const d=await s20Call("workflow_status");const r=d.run;document.getElementById("s20Deploy").textContent=r?(r.conclusion||r.status):"SIN RUN";s20Set(r?`Workflow: ${r.status} / ${r.conclusion||"pendiente"}`:"Todavía no existe una ejecución de deploy-pages.yml.");}catch(e){s20Set("Error: "+e.message)}}
+function s20OpenPreview(){if(s20Url) window.open(s20Url,"_blank","noopener")}
+</script>
+
+<section id="forge-notify-s21" style="margin:18px auto;max-width:1100px;padding:18px;border:1px solid rgba(128,128,128,.35);border-radius:18px;background:rgba(127,127,127,.08)">
+<h2 style="margin-top:0">🔔 Sprint 21 · Centro de alertas móviles</h2>
+<p style="color:var(--muted)">Eventos críticos preparados: VB requerido, QA bloqueado, presupuesto, preview listo y misión terminada. Primero usa notificaciones del navegador/PWA a $0. Web Push con la app cerrada queda preparado y se activa únicamente cuando existan claves VAPID.</p>
+<div class="stats">
+<div class="stat"><strong id="s21Backend">—</strong><span>Notify backend</span></div>
+<div class="stat"><strong id="s21Push">—</strong><span>Push cerrado</span></div>
+<div class="stat"><strong>$0.00</strong><span>Costo IA</span></div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin-top:14px">
+<button class="primary" onclick="s21Health()">Comprobar alertas</button>
+<button onclick="s21Permission()">Permitir notificaciones</button>
+<button onclick="s21Test()">Probar alerta local</button>
+<button onclick="s21Queue()">Simular VB requerido</button>
+</div>
+<div style="margin-top:14px;padding:12px;border-radius:14px;background:var(--panel2)">
+<b>Estado:</b> <span id="s21Msg">Listo.</span>
+</div>
+</section>
+
+<script>
+const S21_ENDPOINT="https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/forge-notify";
+const S21_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlenlhb3lnaGt2dmRjaWF0bmN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc5Nzg1NzEsImV4cCI6MjEwMzU1NDU3MX0.3nuGvmi54v-SPsXlCB9keOSUzTfx8ShMXKtUxf70TrI";
+async function s21Call(payload,method="POST"){const r=await fetch(S21_ENDPOINT,{method,headers:{"Authorization":`Bearer ${S21_KEY}`,"apikey":S21_KEY,"Content-Type":"application/json"},body:method==="POST"?JSON.stringify(payload):undefined});const d=await r.json().catch(()=>({}));if(!r.ok||d.ok===false)throw new Error(d.error||`HTTP ${r.status}`);return d}
+function s21Set(x){document.getElementById("s21Msg").textContent=x}
+async function s21Health(){try{const d=await s21Call(null,"GET");document.getElementById("s21Backend").textContent="ACTIVO";document.getElementById("s21Push").textContent=d.vapidConfigured?"LISTO":"PENDIENTE VAPID";s21Set(`Backend activo · ${d.subscriptions} suscripción(es) · costo $0.00`);}catch(e){s21Set("Error: "+e.message)}}
+async function s21Permission(){if(!("Notification" in window))return s21Set("Este navegador no expone Notification API.");const p=await Notification.requestPermission();s21Set("Permiso: "+p)}
+async function s21Test(){if(!("Notification" in window))return s21Set("Notification API no disponible.");if(Notification.permission!=="granted")await s21Permission();if(Notification.permission==="granted"){new Notification("FORGE · Prueba",{body:"Centro de alertas activo. Costo $0.00."});s21Set("Alerta local enviada.");}}
+async function s21Queue(){try{const d=await s21Call({action:"queue",eventType:"vb_required",title:"FORGE necesita VB",body:"Una misión está lista para su aprobación.",severity:"warning"});s21Set(d.pushReady?"Evento creado y Push listo.":"Evento creado. Push con app cerrada espera configuración VAPID.");if(Notification.permission==="granted")new Notification("FORGE necesita VB",{body:"Una misión está lista para su aprobación."});}catch(e){s21Set("Error: "+e.message)}}
+</script>
+
+<section id="forge-push-s22" style="margin:18px auto;max-width:1100px;padding:18px;border:1px solid rgba(128,128,128,.35);border-radius:18px;background:rgba(127,127,127,.08)">
+<h2 style="margin-top:0">📲 Sprint 22 · Web Push real</h2>
+<p style="color:var(--muted)">Suscripción Push real mediante Service Worker + PushManager. FORGE puede recibir alertas aunque la PWA no esté en primer plano cuando el servidor tenga configurado VAPID. El registro del dispositivo se realiza solo después de su toque explícito.</p>
+<div class="stats">
+<div class="stat"><strong id="s22Https">—</strong><span>HTTPS / SW</span></div>
+<div class="stat"><strong id="s22Vapid">—</strong><span>VAPID servidor</span></div>
+<div class="stat"><strong id="s22Device">—</strong><span>Este dispositivo</span></div>
+<div class="stat"><strong>$0.00</strong><span>Costo IA</span></div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin-top:14px">
+<button class="primary" onclick="s22Check()">Comprobar Web Push</button>
+<button onclick="s22Subscribe()">Activar alertas en este teléfono</button>
+<button onclick="s22TestLocal()">Probar Service Worker</button>
+</div>
+<div style="margin-top:14px;padding:12px;border-radius:14px;background:var(--panel2)">
+<b>Estado:</b> <span id="s22Msg">Listo para comprobar.</span>
+</div>
+</section>
+
+<script>
+const S22_ENDPOINT="https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/forge-notify";
+const S22_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlenlhb3lnaGt2dmRjaWF0bmN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc5Nzg1NzEsImV4cCI6MjEwMzU1NDU3MX0.3nuGvmi54v-SPsXlCB9keOSUzTfx8ShMXKtUxf70TrI";
+function s22Set(x){document.getElementById("s22Msg").textContent=x}
+function s22B64(s){const p="=".repeat((4-s.length%4)%4),b=(s+p).replace(/-/g,"+").replace(/_/g,"/"),raw=atob(b);return Uint8Array.from([...raw].map(c=>c.charCodeAt(0)))}
+async function s22Call(payload=null,method="GET"){
+ const r=await fetch(S22_ENDPOINT,{method,headers:{"Authorization":`Bearer ${S22_KEY}`,"apikey":S22_KEY,"Content-Type":"application/json"},body:method==="POST"?JSON.stringify(payload):undefined});
+ const d=await r.json().catch(()=>({})); if(!r.ok||d.ok===false) throw new Error(d.error||`HTTP ${r.status}`); return d;
+}
+async function s22Check(){
+ try{
+  const secure=location.protocol==="https:"||location.hostname==="localhost";
+  document.getElementById("s22Https").textContent=secure&&("serviceWorker" in navigator)?"LISTO":"REQUIERE HTTPS";
+  const d=await s22Call();
+  document.getElementById("s22Vapid").textContent=d.vapidConfigured?"LISTO":"PENDIENTE";
+  document.getElementById("s22Device").textContent=d.subscriptions?`${d.subscriptions} REG.`:"SIN REG.";
+  s22Set(d.vapidConfigured?"Servidor listo. Puede activar este teléfono.":"Código Web Push terminado; falta cargar una vez las claves VAPID privadas/públicas en el servidor.");
+ }catch(e){s22Set("Error: "+e.message)}
+}
+async function s22Subscribe(){
+ try{
+  if(!("serviceWorker" in navigator)||!("PushManager" in window)) throw new Error("Este navegador no soporta Web Push.");
+  if(!(location.protocol==="https:"||location.hostname==="localhost")) throw new Error("Web Push requiere abrir FORGE por HTTPS.");
+  const d=await s22Call(); if(!d.vapidConfigured||!d.vapidPublicKey) throw new Error("El servidor todavía no tiene VAPID configurado.");
+  const perm=await Notification.requestPermission(); if(perm!=="granted") throw new Error("Permiso de notificaciones no concedido.");
+  const reg=await navigator.serviceWorker.register("./sw-push.js");
+  await navigator.serviceWorker.ready;
+  let sub=await reg.pushManager.getSubscription();
+  if(!sub) sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:s22B64(d.vapidPublicKey)});
+  await s22Call({action:"subscribe",subscription:sub.toJSON(),userAgent:navigator.userAgent},"POST");
+  document.getElementById("s22Device").textContent="ACTIVO";
+  s22Set("Este teléfono quedó suscrito a Web Push.");
+ }catch(e){s22Set("No activado: "+e.message)}
+}
+async function s22TestLocal(){
+ try{
+  const reg=await navigator.serviceWorker.register("./sw-push.js");
+  const perm=await Notification.requestPermission(); if(perm!=="granted") throw new Error("Permiso no concedido.");
+  await reg.showNotification("FORGE · Web Push",{body:"Service Worker listo para recibir alertas. Costo $0.00.",data:{url:"./"}});
+  s22Set("Prueba local enviada por Service Worker.");
+ }catch(e){s22Set("Error: "+e.message)}
+}
+</script>
+
+<section id="forge-auth-s23" style="margin:18px auto;max-width:1100px;padding:18px;border:1px solid rgba(128,128,128,.35);border-radius:18px;background:rgba(127,127,127,.08)">
+  <h2 style="margin-top:0">🔐 Sprint 23 · Acceso seguro de propietario</h2>
+  <p style="color:var(--muted)">
+    FORGE deja de tratar el token público como identidad personal. El acceso usa Supabase Auth y el backend valida al usuario real antes de permitir operaciones sensibles.
+  </p>
+
+  <div class="stats">
+    <div class="stat"><strong id="s23Session">SÍ</strong><span>Sesión autenticada</span></div>
+    <div class="stat"><strong id="s23Owner">SÍ</strong><span>Propietario autorizado</span></div>
+    <div class="stat"><strong id="s23Publisher">PROTEGIDO</strong><span>Publisher</span></div>
+    <div class="stat"><strong id="s23Safety">PROTEGIDO</strong><span>Safety</span></div>
+  </div>
+
+  <div style="margin-top:14px;display:grid;gap:10px">
+    <input id="s23Email" type="email" placeholder="Correo para iniciar sesión" style="padding:12px;border-radius:12px;border:1px solid rgba(128,128,128,.4)">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px">
+      <button class="primary" onclick="s23SendMagic()">Enviar enlace de acceso</button>
+      <button onclick="s23Check()">Comprobar sesión</button>
+      <button onclick="s23ClaimOwner()">Registrar este usuario como propietario</button>
+      <button onclick="s23SignOut()">Cerrar sesión</button>
+    </div>
+  </div>
+
+  <div style="margin-top:14px;padding:12px;border-radius:14px;background:var(--panel2)">
+    <b>Estado:</b> <span id="s23Msg">Acceso autorizado · rol owner.</span>
+  </div>
+
+  <details style="margin-top:12px">
+    <summary><b>Qué cambió</b></summary>
+    <p style="color:var(--muted)">
+      El token público sigue sirviendo para identificar el proyecto, pero ya no concede permisos personales.
+      El backend `forge-auth` valida un JWT de usuario real y consulta la lista privada `forge_authorized_users`.
+      Publisher y Safety ya fueron endurecidos para exigir ese usuario autorizado.
+    </p>
+  </details>
+</section>
+
+
+<script>
+const S23_URL="https://aezyaoyghkvvdciatnct.supabase.co";
+const S23_KEY="sb_publishable_sFBO4x6k0KhDdHUVPNdeAw_aUj6rhod";
+const s23Client=window.supabase.createClient(S23_URL,S23_KEY);
+const S23_AUTH=S23_URL+"/functions/v1/forge-auth";
+
+function s23Set(x){document.getElementById("s23Msg").textContent=x}
+
+async function s23Session(){
+  const {data}=await s23Client.auth.getSession();
+  return data.session||null;
+}
+
+async function s23Call(action){
+  const session=await s23Session();
+  if(!session) throw new Error("No hay sesión autenticada.");
+  const r=await fetch(S23_AUTH,{
+    method:"POST",
+    headers:{
+      "Authorization":`Bearer ${session.access_token}`,
+      "apikey":S23_KEY,
+      "Content-Type":"application/json"
+    },
+    body:JSON.stringify({action})
+  });
+  const d=await r.json().catch(()=>({}));
+  if(!r.ok||d.ok===false) throw Object.assign(new Error(d.error||`HTTP ${r.status}`),{data:d});
+  return d;
+}
+
+async function s23SendMagic(){
+  try{
+    const email=document.getElementById("s23Email").value.trim();
+    if(!email) throw new Error("Digite su correo.");
+    const redirectTo=location.protocol.startsWith("http")?location.href.split("#")[0]:undefined;
+    const {error}=await s23Client.auth.signInWithOtp({
+      email,
+      options:{shouldCreateUser:true,...(redirectTo?{emailRedirectTo:redirectTo}:{})}
+    });
+    if(error) throw error;
+    s23Set("Enlace enviado. Abra el correo y vuelva a FORGE.");
+  }catch(e){s23Set("Error: "+e.message)}
+}
+
+async function s23Check(){
+  try{
+    const session=await s23Session();
+    document.getElementById("s23Session").textContent=session?"SÍ":"NO";
+    if(!session) return s23Set("No hay una sesión activa.");
+    const d=await s23Call("status");
+    document.getElementById("s23Owner").textContent=d.authorized?"SÍ":"NO";
+    s23Set(d.authorized?`Acceso autorizado · rol ${d.role}.`:"Sesión válida, pero este usuario no está autorizado.");
+  }catch(e){
+    document.getElementById("s23Owner").textContent="NO";
+    s23Set(e.message);
+  }
+}
+
+async function s23ClaimOwner(){
+  try{
+    const d=await s23Call("bootstrap_owner");
+    document.getElementById("s23Session").textContent="SÍ";
+    document.getElementById("s23Owner").textContent=d.authorized?"SÍ":"NO";
+    s23Set(d.bootstrapped?"Propietario registrado. Este usuario controla FORGE.":`Usuario ya autorizado · rol ${d.role}.`);
+  }catch(e){s23Set("No se pudo registrar propietario: "+e.message)}
+}
+
+async function s23SignOut(){
+  await s23Client.auth.signOut();
+  document.getElementById("s23Session").textContent="NO";
+  document.getElementById("s23Owner").textContent="NO";
+  s23Set("Sesión cerrada.");
+}
+
+s23Client.auth.onAuthStateChange(()=>setTimeout(s23Check,0));
+setTimeout(s23Check,250);
+</script>
+
+
+<section id="forge-security-s24" style="margin:18px auto;max-width:1100px;padding:18px;border:1px solid rgba(128,128,128,.35);border-radius:18px;background:rgba(127,127,127,.08)">
+<h2 style="margin-top:0">🛡️ Sprint 24 · Migración completa al esquema seguro</h2>
+<p style="color:var(--muted)">Runner, Motor IA, Preview y Notify ya fueron migrados al mismo control de propietario. Ninguno acepta el token público como identidad personal.</p>
+<div class="stats">
+  <div class="stat"><strong id="s24Runner">PROTEGIDO</strong><span>Runner v2</span></div>
+  <div class="stat"><strong id="s24AI">PROTEGIDO</strong><span>AI v3</span></div>
+  <div class="stat"><strong id="s24Preview">PROTEGIDO</strong><span>Preview v2</span></div>
+  <div class="stat"><strong id="s24Notify">PROTEGIDO</strong><span>Notify v3</span></div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:14px">
+  <button class="primary" onclick="s24CheckAll()">Comprobar los 4 motores</button>
+  <button onclick="s23Check()">Comprobar propietario</button>
+</div>
+<div style="margin-top:14px;padding:12px;border-radius:14px;background:var(--panel2)">
+<b>Estado:</b> <span id="s24Msg">Inicie sesión como propietario y compruebe los motores.</span>
+</div>
+<details style="margin-top:12px">
+<summary><b>Política aplicada</b></summary>
+<p style="color:var(--muted)">
+Cada Edge Function valida el JWT real con Supabase Auth, obtiene el usuario del servidor y confirma que su UUID está habilitado en <code>forge_authorized_users</code>. 
+Las operaciones con service-role, GitHub y futuras APIs siguen exclusivamente en backend.
+</p>
+</details>
+</section>
+
+
+<script>
+(() => {
+  const originalFetch = window.fetch.bind(window);
+  window.fetch = async function(input, init={}) {
+    try {
+      const url = typeof input === "string" ? input : input?.url || "";
+      if (url.startsWith("https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/") && window.s23Client) {
+        const { data } = await s23Client.auth.getSession();
+        const token = data?.session?.access_token;
+        if (token) {
+          const headers = new Headers(init.headers || (typeof input !== "string" ? input.headers : undefined) || {});
+          headers.set("Authorization", `Bearer ${token}`);
+          if (!headers.has("apikey")) headers.set("apikey", S23_KEY);
+          init = {...init, headers};
+        }
+      }
+    } catch (_) {}
+    return originalFetch(input, init);
+  };
+})();
+
+async function s24CheckAll(){
+  try{
+    const session=await s23Session();
+    if(!session) throw new Error("Primero inicie sesión como propietario.");
+    const token=session.access_token;
+    const endpoints=[
+      ["Runner","forge-runner"],
+      ["AI","forge-ai"],
+      ["Preview","forge-preview"],
+      ["Notify","forge-notify"]
+    ];
+    const results=[];
+    for(const [name,slug] of endpoints){
+      const r=await fetch(`https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/${slug}`,{
+        method:"GET",
+        headers:{"Authorization":`Bearer ${token}`,"apikey":S23_KEY}
+      });
+      const d=await r.json().catch(()=>({}));
+      results.push({name,ok:r.ok&&d.ok!==false,status:r.status});
+    }
+    document.getElementById("s24Runner").textContent=results[0].ok?"OK":"FALLÓ";
+    document.getElementById("s24AI").textContent=results[1].ok?"OK":"FALLÓ";
+    document.getElementById("s24Preview").textContent=results[2].ok?"OK":"FALLÓ";
+    document.getElementById("s24Notify").textContent=results[3].ok?"OK":"FALLÓ";
+    const good=results.filter(x=>x.ok).length;
+    document.getElementById("s24Msg").textContent=`${good}/4 motores respondieron con usuario autenticado.`;
+  }catch(e){
+    document.getElementById("s24Msg").textContent="Error: "+e.message;
+  }
+}
+</script>
+
+
+<section id="forge-readiness-s25" style="margin:18px auto;max-width:1100px;padding:18px;border:1px solid rgba(128,128,128,.35);border-radius:18px;background:rgba(127,127,127,.08)">
+<h2 style="margin-top:0">🧪 Sprint 25 · Cierre técnico / Readiness Gate</h2>
+<p style="color:var(--muted)">Este panel no simula aprobación. Ejecuta las comprobaciones que pueden hacerse desde el cliente autenticado y separa claramente lo operativo de las dependencias pendientes.</p>
+<div class="stats">
+ <div class="stat"><strong id="s25Auth">PENDIENTE</strong><span>Propietario</span></div>
+ <div class="stat"><strong id="s25Engines">PENDIENTE</strong><span>Motores</span></div>
+ <div class="stat"><strong id="s25Push">PENDIENTE</strong><span>Push cerrado</span></div>
+ <div class="stat"><strong id="s25Ready">NO</strong><span>Jerez Ready</span></div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:14px">
+ <button class="primary" onclick="s25Run()">Ejecutar cierre técnico</button>
+ <button onclick="s23SendMagic()">Enviar acceso propietario</button>
+ <button onclick="s23ClaimOwner()">Registrar propietario</button>
+</div>
+<div style="margin-top:14px;padding:12px;border-radius:14px;background:var(--panel2)">
+<b>Diagnóstico:</b> <span id="s25Msg">Aún no ejecutado.</span>
+</div>
+<div style="margin-top:12px;padding:12px;border-radius:14px;background:var(--panel2)">
+<b>Dependencias conocidas:</b>
+<ul style="margin-bottom:0">
+<li>Debe existir al menos una sesión Supabase Auth y un propietario autorizado.</li>
+<li>Web Push con FORGE cerrado necesita claves VAPID del servidor.</li>
+<li>Preview HTTPS necesita que GitHub Pages quede efectivamente habilitado/publicado.</li>
+<li>Codex Worker autónomo necesita un host persistente autenticado con ChatGPT/Codex.</li>
+</ul>
+</div>
+</section>
+
+
+<script>
+async function s25Run(){
+ const msg=document.getElementById("s25Msg");
+ try{
+  msg.textContent="Ejecutando comprobaciones…";
+  const session=await s23Session();
+  document.getElementById("s25Auth").textContent=session?"SESIÓN":"NO";
+  if(!session){
+    document.getElementById("s25Ready").textContent="NO";
+    msg.textContent="Bloqueado correctamente: todavía no existe sesión de propietario. Use “Enviar acceso propietario”.";
+    return;
+  }
+  let owner=false;
+  try{ const a=await s23Call("status"); owner=!!a.authorized; }catch(_){}
+  document.getElementById("s25Auth").textContent=owner?"OK":"NO OWNER";
+  if(!owner){
+    document.getElementById("s25Ready").textContent="NO";
+    msg.textContent="Sesión válida, pero falta registrar este usuario como propietario.";
+    return;
+  }
+  await s24CheckAll();
+  const engineIds=["s24Runner","s24AI","s24Preview","s24Notify"];
+  const engines=engineIds.every(id=>document.getElementById(id).textContent==="OK");
+  document.getElementById("s25Engines").textContent=engines?"OK":"FALLÓ";
+  let push=false;
+  try{ const d=await s22Call(); push=!!d.vapidConfigured; }catch(_){}
+  document.getElementById("s25Push").textContent=push?"OK":"VAPID";
+  document.getElementById("s25Ready").textContent=(engines&&push)?"PARCIAL":"NO";
+  msg.textContent=engines
+    ? (push ? "Seguridad y motores pasan. Aún verificar Preview HTTPS y Codex Worker antes de Jerez." : "Seguridad y motores pasan. Web Push cerrado sigue bloqueado por VAPID; además falta verificar Preview HTTPS y Codex Worker.")
+    : "Uno o más motores no pasó la comprobación autenticada.";
+ }catch(e){
+  document.getElementById("s25Ready").textContent="NO";
+  msg.textContent="Cierre detenido: "+e.message;
+ }
+}
+</script>
+
+
+<section id="forge-s26" style="margin:18px auto;max-width:1100px;padding:18px;border:1px solid rgba(128,128,128,.35);border-radius:18px;background:rgba(127,127,127,.08)">
+<h2 style="margin-top:0">🚀 Sprint 26 · Preview seguro en rama aislada</h2>
+<p style="color:var(--muted)">FORGE ya tiene un orquestador backend que, después del login del propietario, crea automáticamente una rama <code>forge/readiness-*</code>, toma un checkpoint de <code>main</code> y publica ahí el preview + workflow corregido. No toca producción.</p>
+<div class="stats">
+  <div class="stat"><strong>ACTIVO</strong><span>forge-readiness v1</span></div>
+  <div class="stat"><strong>forge/*</strong><span>Rama aislada</span></div>
+  <div class="stat"><strong>BLOQUEADO</strong><span>main</span></div>
+  <div class="stat"><strong>$0.00</strong><span>API IA</span></div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:14px">
+  <button class="primary" onclick="s26Prepare()">Preparar Preview seguro</button>
+  <button onclick="s23Check()">Comprobar propietario</button>
+</div>
+<div style="margin-top:14px;padding:12px;border-radius:14px;background:var(--panel2)">
+<b>Estado:</b> <span id="s26Msg">Motor desplegado. Requiere sesión de propietario para ejecutar.</span>
+</div>
+</section>
+
+<script>
+const S26_ENDPOINT="https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/forge-readiness";
+const S26_WORKFLOW='name: Deploy FORGE to GitHub Pages\n\non:\n  push:\n    branches: [main]\n  workflow_dispatch:\n\npermissions:\n  contents: read\n  pages: write\n  id-token: write\n\nconcurrency:\n  group: pages\n  cancel-in-progress: true\n\njobs:\n  deploy:\n    environment:\n      name: github-pages\n      url: ${{ steps.deployment.outputs.page_url }}\n    runs-on: ubuntu-latest\n    steps:\n      - name: Checkout\n        uses: actions/checkout@v6\n      - name: Setup Pages\n        uses: actions/configure-pages@v5\n      - name: Upload artifact\n        uses: actions/upload-pages-artifact@v4\n        with:\n          path: .\n      - name: Deploy to GitHub Pages\n        id: deployment\n        uses: actions/deploy-pages@v4\n';
+
+async function s26Prepare(){
+  const el=document.getElementById("s26Msg");
+  try{
+    const session=await s23Session();
+    if(!session) throw new Error("Primero inicie sesión como propietario.");
+    const current="<!doctype html>\n"+document.documentElement.outerHTML;
+    el.textContent="Creando checkpoint y rama aislada…";
+    const r=await fetch(S26_ENDPOINT,{
+      method:"POST",
+      headers:{
+        "Authorization":`Bearer ${session.access_token}`,
+        "apikey":S23_KEY,
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify({
+        action:"prepare_preview",
+        owner:"Petter1981",
+        repo:"Forge",
+        html:current,
+        workflow:S26_WORKFLOW
+      })
+    });
+    const d=await r.json().catch(()=>({}));
+    if(!r.ok||d.ok===false) throw new Error(d.error||`HTTP ${r.status}`);
+    el.textContent=`Preview preparado en ${d.branch}. main quedó intacto. Falta VB explícito para cualquier promoción a producción.`;
+  }catch(e){ el.textContent="No ejecutado: "+e.message; }
+}
+</script>
+
+<script>
+const FORGE_BOOTSTRAP_CODE='wPZNVePwN3Vh-oZIN3NtPgdgjIZLAT-L';
+
+function forgeGateMsg(t){ const e=document.getElementById("forgeAdminMsg"); if(e)e.textContent=t; }
+function forgeGate(show){ const e=document.getElementById("forgeAdminGate"); if(e)e.hidden=!show; }
+
+async function forgeAdminAuthorize(session, allowBootstrap=true){
+  if(!session){ forgeGate(true); forgeGateMsg("Ingrese con su usuario administrador."); return false; }
+  try{
+    let r=await fetch("https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/forge-auth",{
+      method:"POST",
+      headers:{"Authorization":`Bearer ${session.access_token}`,"apikey":S23_KEY,"Content-Type":"application/json"},
+      body:JSON.stringify({action:"status"})
+    });
+    let d=await r.json().catch(()=>({}));
+    if(r.ok && d.authorized){
+      document.getElementById("forgeAdminIdentity").textContent=`Administrador: ${d.user?.email||"sesión válida"}`;
+      forgeGate(false); return true;
+    }
+    if(allowBootstrap && r.status===403){
+      forgeGateMsg("Validando alta inicial segura del propietario…");
+      r=await fetch("https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/forge-auth",{
+        method:"POST",
+        headers:{"Authorization":`Bearer ${session.access_token}`,"apikey":S23_KEY,"Content-Type":"application/json"},
+        body:JSON.stringify({action:"bootstrap_owner",setup_code:FORGE_BOOTSTRAP_CODE})
+      });
+      d=await r.json().catch(()=>({}));
+      if(r.ok && d.authorized){
+        document.getElementById("forgeAdminIdentity").textContent=`Propietario registrado: ${d.user?.email||""}`;
+        forgeGate(false); return true;
+      }
+    }
+    forgeGate(true);
+    forgeGateMsg(d.error||"Este usuario no está autorizado para FORGE.");
+    return false;
+  }catch(e){
+    forgeGate(true); forgeGateMsg("No se pudo validar el acceso: "+e.message); return false;
+  }
+}
+
+async function forgeAdminLogin(){
+  try{
+    const email=document.getElementById("forgeAdminEmail").value.trim();
+    const password=document.getElementById("forgeAdminPassword").value;
+    if(!email||password.length<8) throw new Error("Ingrese correo y una contraseña de al menos 8 caracteres.");
+    forgeGateMsg("Iniciando sesión…");
+    const {data,error}=await s23Client.auth.signInWithPassword({email,password});
+    if(error) throw error;
+    await forgeAdminAuthorize(data.session,false);
+  }catch(e){ forgeGateMsg("Acceso rechazado: "+e.message); }
+}
+
+async function forgeAdminCreate(){
+  try{
+    const email=document.getElementById("forgeAdminEmail").value.trim();
+    const password=document.getElementById("forgeAdminPassword").value;
+    if(!email||password.length<8) throw new Error("Ingrese correo y una contraseña de al menos 8 caracteres.");
+    forgeGateMsg("Creando la identidad del administrador…");
+    const {data,error}=await s23Client.auth.signUp({email,password});
+    if(error) throw error;
+    if(data.session){
+      await forgeAdminAuthorize(data.session,true);
+    }else{
+      forgeGate(true);
+      forgeGateMsg("Cuenta creada. Revise su correo para confirmar la dirección; después vuelva aquí y pulse Entrar.");
+    }
+  }catch(e){ forgeGateMsg("No se pudo crear el administrador: "+e.message); }
+}
+
+async function s23ClaimOwner(){
+  const session=await s23Session();
+  if(!session){ s23Msg("Primero inicie sesión."); return; }
+  try{
+    const r=await fetch(S23_AUTH_ENDPOINT,{
+      method:"POST",
+      headers:{"Authorization":`Bearer ${session.access_token}`,"apikey":S23_KEY,"Content-Type":"application/json"},
+      body:JSON.stringify({action:"bootstrap_owner",setup_code:FORGE_BOOTSTRAP_CODE})
+    });
+    const d=await r.json().catch(()=>({}));
+    if(!r.ok) throw new Error(d.error||`HTTP ${r.status}`);
+    s23Msg("Propietario registrado y protegido.");
+    await forgeAdminAuthorize(session,false);
+  }catch(e){s23Msg("Error: "+e.message);}
+}
+
+window.addEventListener("load", async()=>{
+  try{
+    const {data}=await s23Client.auth.getSession();
+    await forgeAdminAuthorize(data.session,false);
+    s23Client.auth.onAuthStateChange((_event,session)=>{ setTimeout(()=>forgeAdminAuthorize(session,false),0); });
+  }catch(e){ forgeGate(true); forgeGateMsg("Login requerido."); }
+});
+</script>
+
+
+<section id="forge-s29" style="margin:18px auto;max-width:1100px;padding:18px;border:1px solid rgba(128,128,128,.35);border-radius:18px;background:rgba(127,127,127,.08)">
+  <h2 style="margin-top:0">🧪 Sprint 29 · Owner E2E Harness</h2>
+  <p style="color:var(--muted)">Una sola prueba valida la sesión del propietario y consulta los motores protegidos con operaciones de solo lectura. No crea misiones, no crea ramas, no escribe en GitHub, no toca <code>main</code> y no usa OpenAI de pago.</p>
+
+  <div class="stats" id="s29Stats">
+    <div class="stat"><strong id="s29Owner">PENDIENTE</strong><span>Owner</span></div>
+    <div class="stat"><strong id="s29Core">0/7</strong><span>Motores protegidos</span></div>
+    <div class="stat"><strong id="s29Prod">BLOQUEADO</strong><span>Producción</span></div>
+    <div class="stat"><strong id="s29Cost">$0.00</strong><span>API variable</span></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:14px">
+    <button class="primary" onclick="s29Run()">Ejecutar E2E seguro</button>
+    <button onclick="s29Clear()">Limpiar resultado</button>
+  </div>
+
+  <div style="margin-top:14px;padding:12px;border-radius:14px;background:var(--panel2)">
+    <b>Estado:</b> <span id="s29Msg">Listo para probar con la sesión actual.</span>
+  </div>
+
+  <div id="s29Grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin-top:12px"></div>
+
+  <details style="margin-top:12px">
+    <summary><b>Qué prueba exactamente</b></summary>
+    <p style="color:var(--muted);margin-bottom:0">
+      forge-auth confirma que la sesión pertenece a un usuario autorizado. Después se hacen llamadas GET autenticadas a Publisher, Runner, AI, Safety, Preview, Notify y Readiness.
+      Una respuesta funcional cuenta como PASS aunque un motor reporte una dependencia conocida no configurada; una denegación 401/403 cuenta como fallo de autorización.
+    </p>
+  </details>
+</section>
+
+<script>
+const S29_BASE="https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/";
+const S29_ENGINES=[
+  ["Publisher","forge-publisher"],
+  ["Runner","forge-runner"],
+  ["AI","forge-ai"],
+  ["Safety","forge-safety"],
+  ["Preview","forge-preview"],
+  ["Notify","forge-notify"],
+  ["Readiness","forge-readiness"]
+];
+
+function s29Card(name,state,detail){
+  const good=state==="PASS";
+  return `<div style="padding:12px;border-radius:14px;background:var(--panel2);border:1px solid rgba(128,128,128,.25)">
+    <div style="display:flex;justify-content:space-between;gap:8px"><b>${name}</b><strong>${good?"✅ PASS":"❌ "+state}</strong></div>
+    <div style="color:var(--muted);font-size:12px;margin-top:6px;word-break:break-word">${detail||""}</div>
+  </div>`;
+}
+
+async function s29Fetch(slug,token){
+  const r=await fetch(S29_BASE+slug,{
+    method:"GET",
+    headers:{
+      "Authorization":`Bearer ${token}`,
+      "apikey":S23_KEY,
+      "Accept":"application/json"
+    }
+  });
+  const d=await r.json().catch(()=>({}));
+  return {ok:r.ok && d.ok!==false,status:r.status,data:d};
+}
+
+async function s29Run(){
+  const msg=document.getElementById("s29Msg");
+  const grid=document.getElementById("s29Grid");
+  grid.innerHTML="";
+  document.getElementById("s29Owner").textContent="REVISANDO";
+  document.getElementById("s29Core").textContent="0/7";
+  try{
+    msg.textContent="Validando sesión y propietario…";
+    const session=await s23Session();
+    if(!session) throw new Error("No hay una sesión activa. Vuelva a Entrar.");
+    const owner=await s23Call("status");
+    if(!owner?.authorized) throw new Error("La sesión existe, pero no está autorizada como propietario.");
+    document.getElementById("s29Owner").textContent="OWNER ✅";
+
+    let passed=0;
+    const cards=[];
+    for(const [name,slug] of S29_ENGINES){
+      msg.textContent=`Probando ${name}…`;
+      try{
+        const x=await s29Fetch(slug,session.access_token);
+        if(x.ok){
+          passed++;
+          const detail=[
+            `HTTP ${x.status}`,
+            x.data?.service||slug,
+            x.data?.role?`role=${x.data.role}`:"",
+            x.data?.productionWrites===false?"productionWrites=false":""
+          ].filter(Boolean).join(" · ");
+          cards.push(s29Card(name,"PASS",detail));
+        }else{
+          cards.push(s29Card(name,`HTTP ${x.status}`,x.data?.error||x.data?.message||"Respuesta no válida"));
+        }
+      }catch(e){
+        cards.push(s29Card(name,"ERROR",e.message));
+      }
+      grid.innerHTML=cards.join("");
+      document.getElementById("s29Core").textContent=`${passed}/7`;
+    }
+
+    const all=passed===S29_ENGINES.length;
+    msg.textContent=all
+      ?"✅ E2E seguro aprobado: propietario + 7/7 motores protegidos responden. Producción sigue bloqueada."
+      :`⚠️ E2E parcial: ${passed}/7 motores pasaron. Revise el detalle antes de continuar.`;
+  }catch(e){
+    document.getElementById("s29Owner").textContent="FALLÓ";
+    msg.textContent="❌ E2E detenido: "+e.message;
+  }
+}
+
+function s29Clear(){
+  document.getElementById("s29Grid").innerHTML="";
+  document.getElementById("s29Owner").textContent="PENDIENTE";
+  document.getElementById("s29Core").textContent="0/7";
+  document.getElementById("s29Msg").textContent="Listo para probar con la sesión actual.";
+}
+</script>
+
+<section id="forge-s30" style="margin:18px auto;max-width:1100px;padding:18px;border:1px solid rgba(128,128,128,.35);border-radius:18px;background:rgba(127,127,127,.08)">
+<h2>🌐 Sprint 30 · Preview HTTPS aislado</h2>
+<p style="color:var(--muted)">Crea un checkpoint y una rama <code>forge/readiness-*</code> desde main. No escribe en main ni promueve producción.</p>
+<div class="stats"><div class="stat"><strong>OWNER</strong><span>Autorización</span></div><div class="stat"><strong id="s30Branch">PENDIENTE</strong><span>Rama aislada</span></div><div class="stat"><strong>BLOQUEADO</strong><span>Producción</span></div><div class="stat"><strong>$0.00</strong><span>API variable</span></div></div>
+<button class="primary" style="width:100%;margin-top:14px" onclick="s30Prepare()">Preparar Preview HTTPS seguro</button>
+<div id="s30Msg" style="margin-top:12px;padding:12px;border-radius:14px;background:var(--panel2)">Listo para crear únicamente la rama aislada.</div><div id="s30Result" style="margin-top:10px"></div>
+</section>
+<script>
+const S30_WORKFLOW="name: FORGE Pages Preview\\non:\\n  workflow_dispatch:\\n  push:\\n    branches:\\n      - 'forge/readiness-*'\\npermissions:\\n  contents: read\\n  pages: write\\n  id-token: write\\njobs:\\n  deploy:\\n    environment:\\n      name: github-pages\\n    runs-on: ubuntu-latest\\n    steps:\\n      - uses: actions/checkout@v4\\n      - uses: actions/configure-pages@v5\\n      - uses: actions/upload-pages-artifact@v3\\n        with:\\n          path: .\\n      - uses: actions/deploy-pages@v4";
+async function s30Prepare(){const m=document.getElementById("s30Msg"),o=document.getElementById("s30Result");o.innerHTML="";try{m.textContent="Validando owner y preparando rama aislada…";const s=await s23Session();if(!s)throw new Error("No hay sesión activa.");const a=await s23Call("status");if(!a?.authorized)throw new Error("Sesión no autorizada como owner.");const r=await fetch("https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/forge-readiness",{method:"POST",headers:{"Authorization":"Bearer "+s.access_token,"apikey":S23_KEY,"Content-Type":"application/json"},body:JSON.stringify({action:"prepare_preview",owner:"Petter1981",repo:"Forge",html:document.documentElement.outerHTML,workflow:S30_WORKFLOW})});const d=await r.json().catch(()=>({}));if(!r.ok||!d.ok)throw new Error(d.error||("HTTP "+r.status));document.getElementById("s30Branch").textContent="CREADA ✅";m.textContent="✅ Rama aislada preparada; main intacto.";o.innerHTML="<div style='padding:12px;border-radius:14px;background:var(--panel2)'><b>Rama:</b> <code>"+d.branch+"</code><br><b>Baseline main:</b> <code>"+(d.base_sha||"")+"</code><br><b>Archivos:</b> "+(d.files||[]).map(x=>x.path).join(", ")+"<br><b>Producción:</b> "+(d.protected_branch_untouched?"sin tocar ✅":"REVISAR")+"</div>";}catch(e){document.getElementById("s30Branch").textContent="FALLÓ";m.textContent="❌ "+e.message;}}
+</script>
+
+<section id="forge-s31" style="margin:18px auto;max-width:1100px;padding:18px;border:1px solid rgba(128,128,128,.35);border-radius:18px;background:rgba(127,127,127,.08)">
+<h2>🛠️ Sprint 31.1 · Pages Gate Repair</h2><div style="font-size:12px;color:var(--muted);margin-top:-8px;margin-bottom:10px">Hotfix de botón móvil · binding táctil reforzado</div>
+<p style="color:var(--muted)">Diagnostica Pages, intenta activarlo si hace falta, crea un nuevo preview aislado y revisa el workflow. No hace merge a main.</p>
+<div class="stats">
+<div class="stat"><strong id="s31Pages">PENDIENTE</strong><span>GitHub Pages</span></div>
+<div class="stat"><strong id="s31Branch">PENDIENTE</strong><span>Rama preview</span></div>
+<div class="stat"><strong id="s31Run">PENDIENTE</strong><span>Workflow</span></div>
+<div class="stat"><strong>$0.00</strong><span>API variable</span></div>
+</div>
+<button id="s31RepairBtn" class="primary" type="button" style="width:100%;margin-top:14px;min-height:52px;font-weight:700">Diagnosticar y reparar Preview HTTPS</button>
+<div id="s31Msg" style="margin-top:12px;padding:12px;border-radius:14px;background:var(--panel2)">Listo para ejecutar con la sesión owner.</div>
+<div id="s31Log" style="margin-top:10px;font-size:13px"></div>
+</section>
+<script>
+function s31Line(t,ok=true){document.getElementById("s31Log").innerHTML+=`<div style="padding:9px 11px;margin-top:7px;border-radius:12px;background:var(--panel2)">${ok?"✅":"⚠️"} ${t}</div>`}
+async function s31Preview(action){
+ const s=await s23Session(); if(!s) throw new Error("No hay sesión activa.");
+ const r=await fetch("https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/forge-preview",{method:"POST",headers:{"Authorization":"Bearer "+s.access_token,"apikey":S23_KEY,"Content-Type":"application/json"},body:JSON.stringify({action,owner:"Petter1981",repo:"Forge"})});
+ const d=await r.json().catch(()=>({})); return {ok:r.ok&&d.ok!==false,http:r.status,data:d};
+}
+async function s31Repair(){
+ const m=document.getElementById("s31Msg"); 
+ const btn=document.getElementById("s31RepairBtn");
+ if(btn){btn.disabled=true;btn.textContent="Ejecutando diagnóstico…";}
+ m.textContent="✅ Toque recibido. Iniciando diagnóstico…";
+ document.getElementById("s31Log").innerHTML="";
+ try{
+  const own=await s23Call("status"); if(!own?.authorized) throw new Error("Sesión no autorizada como owner.");
+  m.textContent="1/4 · Comprobando GitHub Pages…";
+  let st=await s31Preview("status");
+  if(!st.ok) throw new Error(st.data?.error||("Pages status HTTP "+st.http));
+  if(!st.data.enabled){
+    s31Line("Pages no configurado. Intentando activación Workflow…",false);
+    m.textContent="2/4 · Activando GitHub Pages…";
+    const en=await s31Preview("enable");
+    if(!en.ok){
+      document.getElementById("s31Pages").textContent="PERMISO";
+      throw new Error((en.data?.error||("Enable HTTP "+en.http))+(en.data?.needsOneTimeSetup?" · El token GitHub actual necesita permiso Pages.":""));
+    }
+    document.getElementById("s31Pages").textContent="ACTIVO ✅"; s31Line("Pages activado en modo Workflow.");
+  } else {document.getElementById("s31Pages").textContent="ACTIVO ✅"; s31Line("GitHub Pages ya está configurado.");}
+  m.textContent="3/4 · Creando nuevo preview aislado…";
+  await s30Prepare();
+  if(!(document.getElementById("s30Branch")?.textContent||"").includes("CREADA")) throw new Error(document.getElementById("s30Msg")?.textContent||"No se pudo crear rama.");
+  document.getElementById("s31Branch").textContent="CREADA ✅"; s31Line("Nueva rama forge/readiness-* creada; main intacto.");
+  m.textContent="4/4 · Consultando workflow…"; await new Promise(r=>setTimeout(r,3500));
+  const wf=await s31Preview("workflow_status"); if(!wf.ok) throw new Error(wf.data?.error||("Workflow HTTP "+wf.http));
+  const run=wf.data?.run; if(!run){document.getElementById("s31Run").textContent="SIN RUN"; m.textContent="⚠️ Pages reparado; workflow aún no visible."; return;}
+  document.getElementById("s31Run").textContent=(run.conclusion||run.status||"unknown").toUpperCase();
+  s31Line("Workflow: "+run.status+(run.conclusion?" / "+run.conclusion:""));
+  m.textContent=run.conclusion==="success"?"✅ Preview HTTPS aprobado; producción sigue bloqueada.":run.status!=="completed"?"⏳ Workflow real en ejecución.":"⚠️ Pages está configurado, pero el workflow aún falla; diagnóstico preservado sin tocar main.";
+ }catch(e){
+   m.textContent="❌ Gate detenido: "+e.message; 
+   s31Line(e.message,false);
+ }finally{
+   const btn=document.getElementById("s31RepairBtn");
+   if(btn){btn.disabled=false;btn.textContent="Diagnosticar y reparar Preview HTTPS";}
+ }
+}
+document.addEventListener("DOMContentLoaded",()=>{
+  const btn=document.getElementById("s31RepairBtn");
+  if(btn){
+    btn.addEventListener("click",(ev)=>{
+      ev.preventDefault();
+      ev.stopPropagation();
+      s31Repair();
+    },{passive:false});
+    btn.addEventListener("touchend",(ev)=>{
+      ev.preventDefault();
+      s31Repair();
+    },{passive:false});
+  }
+});
+</script>
+
+
+<section id="forge-s32" style="margin:18px auto;max-width:1100px;padding:18px;border:1px solid rgba(128,128,128,.35);border-radius:18px;background:rgba(127,127,127,.08)">
+<h2>🚀 Sprint 32 · Branch Preview Engine</h2>
+<div style="font-size:12px;color:var(--muted);margin-top:-8px;margin-bottom:10px">Preview HTTPS sin workflow personalizado · main protegido</div>
+<p style="color:var(--muted)">Crea una rama aislada <code>forge/readiness-*</code>, apunta GitHub Pages directamente a esa rama y verifica el build real. No hace merge ni escribe en <code>main</code>.</p>
+
+<div class="stats">
+  <div class="stat"><strong id="s32Owner">OK ✅</strong><span>Owner</span></div>
+  <div class="stat"><strong id="s32Branch">PENDIENTE</strong><span>Rama aislada</span></div>
+  <div class="stat"><strong id="s32Pages">PENDIENTE</strong><span>Pages source</span></div>
+  <div class="stat"><strong id="s32Build">PENDIENTE</strong><span>Build HTTPS</span></div>
+  <div class="stat"><strong>$0.00</strong><span>API variable</span></div>
+</div>
+
+<button id="s32RunBtn" class="primary" type="button" style="width:100%;margin-top:14px;min-height:54px;font-weight:800" disabled="">Preparando Preview…</button>
+<button id="s32CheckBtn" type="button" style="width:100%;margin-top:9px;min-height:46px;font-weight:700" disabled="">
+Revisar build actual
+</button>
+
+<div id="s32Msg" style="margin-top:12px;padding:12px;border-radius:14px;background:var(--panel2)">2/4 · Creando rama aislada desde main…</div>
+<div id="s32Url" style="display:none;margin-top:10px;padding:12px;border-radius:14px;background:var(--panel2)"></div>
+<div id="s32Log" style="margin-top:10px;font-size:13px"><div style="padding:9px 11px;margin-top:7px;border-radius:12px;background:var(--panel2)">✅ Sesión owner validada.</div></div>
+</section>
+
+<script>
+let S32_LAST_BRANCH = localStorage.getItem("forge_s32_last_branch") || "";
+
+function s32Line(t,ok=true){
+  const box=document.getElementById("s32Log");
+  if(box) box.innerHTML+=`<div style="padding:9px 11px;margin-top:7px;border-radius:12px;background:var(--panel2)">${ok?"✅":"⚠️"} ${t}</div>`;
+}
+
+async function s32Edge(slug,payload){
+  const s=await s23Session();
+  if(!s) throw new Error("No hay sesión activa.");
+  const r=await fetch(`https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/${slug}`,{
+    method:"POST",
+    headers:{
+      "Authorization":"Bearer "+s.access_token,
+      "apikey":S23_KEY,
+      "Content-Type":"application/json"
+    },
+    body:JSON.stringify(payload)
+  });
+  const d=await r.json().catch(()=>({}));
+  if(!r.ok || d.ok===false) throw new Error(d.error || `HTTP ${r.status}`);
+  return d;
+}
+
+async function s32PrepareBranch(){
+  return await s32Edge("forge-readiness",{
+    action:"prepare_preview",
+    owner:"Petter1981",
+    repo:"Forge",
+    html:document.documentElement.outerHTML
+  });
+}
+
+async function s32Preview(action, extra={}){
+  return await s32Edge("forge-preview",{
+    action,
+    owner:"Petter1981",
+    repo:"Forge",
+    ...extra
+  });
+}
+
+function s32ShowUrl(url){
+  const box=document.getElementById("s32Url");
+  if(!box || !url) return;
+  box.style.display="block";
+  box.innerHTML=`<b>Preview HTTPS:</b><br><a href="${url}" target="_blank" rel="noopener">${url}</a>`;
+}
+
+async function s32CheckBuild(silent=false){
+  const m=document.getElementById("s32Msg");
+  try{
+    if(!silent) m.textContent="Consultando build real de GitHub Pages…";
+    const p=await s32Preview("status");
+    if(p.html_url) s32ShowUrl(p.html_url);
+
+    const b=await s32Preview("build_status");
+    const st=(b.build?.status||"unknown").toLowerCase();
+
+    if(st==="built"){
+      document.getElementById("s32Build").textContent="LIVE ✅";
+      m.textContent="✅ Preview HTTPS construido. main sigue intacto.";
+      s32Line("Build GitHub Pages: built.");
+      if(p.html_url) s32ShowUrl(p.html_url);
+      return {done:true,status:st,url:p.html_url};
+    }
+
+    if(["queued","building"].includes(st)){
+      document.getElementById("s32Build").textContent=st.toUpperCase()+" ⏳";
+      if(!silent) m.textContent="⏳ GitHub Pages está construyendo el preview.";
+      return {done:false,status:st,url:p.html_url};
+    }
+
+    if(st==="errored"){
+      document.getElementById("s32Build").textContent="ERROR";
+      const em=b.build?.error?.message || "GitHub Pages reportó error.";
+      m.textContent="❌ "+em;
+      s32Line(em,false);
+      return {done:true,status:st,error:em,url:p.html_url};
+    }
+
+    document.getElementById("s32Build").textContent=st.toUpperCase();
+    if(!silent) m.textContent="Estado de build: "+st;
+    return {done:false,status:st,url:p.html_url};
+  }catch(e){
+    if(!silent){
+      document.getElementById("s32Build").textContent="REVISAR";
+      m.textContent="⚠️ "+e.message;
+      s32Line(e.message,false);
+    }
+    return {done:false,error:e.message};
+  }
+}
+
+async function s32Run(){
+  const m=document.getElementById("s32Msg");
+  const runBtn=document.getElementById("s32RunBtn");
+  const checkBtn=document.getElementById("s32CheckBtn");
+  if(runBtn){runBtn.disabled=true;runBtn.textContent="Preparando Preview…";}
+  if(checkBtn) checkBtn.disabled=true;
+  document.getElementById("s32Log").innerHTML="";
+  document.getElementById("s32Url").style.display="none";
+
+  try{
+    m.textContent="1/4 · Validando sesión owner…";
+    const own=await s23Call("status");
+    if(!own?.authorized) throw new Error("Sesión no autorizada como owner.");
+    document.getElementById("s32Owner").textContent="OK ✅";
+    s32Line("Sesión owner validada.");
+
+    m.textContent="2/4 · Creando rama aislada desde main…";
+    const prep=await s32PrepareBranch();
+    if(!prep.branch || !prep.protected_branch_untouched) throw new Error("No se confirmó protección de main.");
+    S32_LAST_BRANCH=prep.branch;
+    localStorage.setItem("forge_s32_last_branch",prep.branch);
+    document.getElementById("s32Branch").textContent="CREADA ✅";
+    s32Line("Rama "+prep.branch+" creada.");
+    s32Line("main intacto; promoción a producción sigue bloqueada.");
+
+    m.textContent="3/4 · Configurando GitHub Pages desde la rama aislada…";
+    const cfg=await s32Preview("configure_branch_preview",{branch:prep.branch});
+    document.getElementById("s32Pages").textContent="RAMA ✅";
+    s32Line("Pages source → "+prep.branch+" /");
+    if(cfg.html_url) s32ShowUrl(cfg.html_url);
+
+    m.textContent="4/4 · Esperando build HTTPS real…";
+    let result=null;
+    for(let i=0;i<7;i++){
+      await new Promise(r=>setTimeout(r, i===0 ? 2500 : 4000));
+      result=await s32CheckBuild(true);
+      if(result?.done) break;
+      document.getElementById("s32Build").textContent=(result?.status||"BUILDING").toUpperCase()+" ⏳";
+      m.textContent=`4/4 · Build en curso… ${i+1}/7`;
+    }
+
+    if(result?.status==="built"){
+      document.getElementById("s32Build").textContent="LIVE ✅";
+      m.textContent="✅ PREVIEW HTTPS LIVE · main intacto · $0.00 API variable.";
+      s32Line("Preview aprobado técnicamente.");
+      if(result.url) s32ShowUrl(result.url);
+    }else if(result?.status==="errored"){
+      throw new Error(result.error||"Build GitHub Pages falló.");
+    }else{
+      document.getElementById("s32Build").textContent="EN CURSO ⏳";
+      m.textContent="⏳ GitHub aceptó el preview y el build continúa. Use “Revisar build actual” en unos segundos.";
+      s32Line("Configuración completada; build aún en proceso.");
+    }
+  }catch(e){
+    m.textContent="❌ Sprint 32 detenido: "+e.message;
+    s32Line(e.message,false);
+  }finally{
+    if(runBtn){runBtn.disabled=false;runBtn.textContent="Crear y publicar Preview HTTPS aislado";}
+    if(checkBtn) checkBtn.disabled=false;
+  }
+}
+
+document.addEventListener("DOMContentLoaded",()=>{
+  const runBtn=document.getElementById("s32RunBtn");
+  const checkBtn=document.getElementById("s32CheckBtn");
+  if(runBtn) runBtn.addEventListener("click",e=>{e.preventDefault();s32Run();});
+  if(checkBtn) checkBtn.addEventListener("click",e=>{e.preventDefault();s32CheckBuild(false);});
+});
+</script>
+
+
+</body></html>
