@@ -14,7 +14,7 @@
   if(!r.ok) throw new Error('HTTP '+r.status+' cargando aplicación');
   let html=await r.text();
   html=html.replace(/<div id="forgeAdminIdentity">[\s\S]*?<\/div>/,'<div id="forgeAdminIdentity">Sesión administrativa protegida</div>');
-  const runtime='<script src="./forge-runtime-fix.js"><\\/script>';
+  const runtime='<script src="./forge-runtime-fix.js"></scr'+'ipt>';
   html=html.includes('forge-runtime-fix.js')?html:html.replace('</body>',runtime+'</body>');
   document.open();document.write(html);document.close();
  }catch(e){document.body.innerHTML='<div class="boot"><div><b>No se pudo iniciar FORGE</b><small>'+String(e.message||e)+'</small></div></div>';}
