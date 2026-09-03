@@ -1,3 +1,5 @@
 FORGE preview trigger
 branch=forge/readiness-1788235770674
-at=2026-09-01T06:50:30.038Z
+source_rc=forge/release-candidate-final-audit-20260903
+rc_sha=61cf1533d0e52a0aae496b5440fc8dab231aa32c
+purpose=final_preproduction_validation
