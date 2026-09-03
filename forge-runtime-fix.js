@@ -33,56 +33,67 @@
     return data;
   }
 
-  let timer = null;
-  let lastDelay = null;
-  let running = false;
+  const originalRefreshAutonomy = typeof window.refreshAutonomy === 'function'
+    ? window.refreshAutonomy.bind(window)
+    : null;
 
-  function stopTimer() {
-    if (timer) clearTimeout(timer);
-    timer = null;
-  }
+  let lastRunAt = 0;
+  let lastDelay = 120000;
+  let lastStatus = null;
+  let inFlight = false;
 
   function computeDelay(data) {
-    if (document.hidden) return null;
+    if (document.hidden) return Infinity;
     const missions = Array.isArray(data?.missions) ? data.missions : [];
     const active = missions.some(m => ['queued','running','awaiting_approval'].includes(m?.status));
     return active ? 30000 : 120000;
   }
 
-  async function refreshOnce() {
-    if (running || document.hidden) return;
-    running = true;
+  async function refreshStatus(force = false) {
+    if (document.hidden || inFlight) return lastStatus;
+    const now = Date.now();
+    if (!force && now - lastRunAt < lastDelay) return lastStatus;
+    inFlight = true;
     try {
       const data = await runner({ action: 'status' });
-      if (typeof window.refreshAutonomyFromData === 'function') {
-        window.refreshAutonomyFromData(data);
+      lastStatus = data;
+      lastDelay = computeDelay(data);
+      lastRunAt = Date.now();
+
+      // Preserve the existing UI renderer, but prevent it from making its own legacy request.
+      if (originalRefreshAutonomy) {
+        const previousRunner = window.forgeRunner;
+        window.forgeRunner = async payload => {
+          if (payload?.action === 'status') return data;
+          return runner(payload);
+        };
+        try { await originalRefreshAutonomy(); }
+        finally { window.forgeRunner = runner; }
       }
-      const delay = computeDelay(data);
-      lastDelay = delay;
-      stopTimer();
-      if (delay) timer = setTimeout(refreshOnce, delay);
+
       window.dispatchEvent(new CustomEvent('forge:runner-status', { detail: data }));
       return data;
     } finally {
-      running = false;
+      inFlight = false;
     }
   }
 
+  // Legacy 30-second setInterval may continue firing, but this wrapper throttles it:
+  // idle => 120s; active => 30s; hidden tab => no request.
+  window.refreshAutonomy = () => refreshStatus(false);
+  window.forgeRunner = runner;
+
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-      stopTimer();
-    } else {
-      refreshOnce().catch(() => {});
-    }
+    if (!document.hidden) refreshStatus(true).catch(() => {});
   });
 
-  window.forgeRunner = runner;
   window.FORGERuntimeFix = {
     getSession,
     runner,
-    refreshOnce,
-    stop: stopTimer,
-    getPollingDelay: () => lastDelay,
-    version: '1.0.0'
+    refreshStatus,
+    forceRefresh: () => refreshStatus(true),
+    getPollingDelay: () => document.hidden ? null : lastDelay,
+    getLastStatus: () => lastStatus,
+    version: '1.1.0'
   };
 })();
