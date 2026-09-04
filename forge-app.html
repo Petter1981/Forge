@@ -78,7 +78,7 @@ footer{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(580
       <button onclick="forgeAdminCreate()">Crear / activar primer administrador</button>
     </div>
     <div id="forgeAdminMsg">Validando sesión…</div>
-    <div id="forgeAdminIdentity">Administrador: charravc@gmail.com</div>
+    <div id="forgeAdminIdentity">Sesión administrativa protegida</div>
   </div>
 </div>
 
@@ -1016,7 +1016,8 @@ const S20_ENDPOINT="https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/forge-
 const S20_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlenlhb3lnaGt2dmRjaWF0bmN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc5Nzg1NzEsImV4cCI6MjEwMzU1NDU3MX0.3nuGvmi54v-SPsXlCB9keOSUzTfx8ShMXKtUxf70TrI";
 let s20Url="";
 async function s20Call(action){
- const r=await fetch(S20_ENDPOINT,{method:"POST",headers:{"Authorization":`Bearer ${S20_KEY}`,"apikey":S20_KEY,"Content-Type":"application/json"},body:JSON.stringify({action,owner:"Petter1981",repo:"Forge"})});
+ const s=await s23Session(); if(!s) throw new Error("No hay sesión Owner activa.");
+ const r=await fetch(S20_ENDPOINT,{method:"POST",headers:{"Authorization":`Bearer ${s.access_token}`,"apikey":S20_KEY,"Content-Type":"application/json"},body:JSON.stringify({action,owner:"Petter1981",repo:"Forge"})});
  const d=await r.json().catch(()=>({})); if(!r.ok||d.ok===false) throw Object.assign(new Error(d.error||`HTTP ${r.status}`),{data:d}); return d;
 }
 function s20Set(t){document.getElementById("s20Msg").textContent=t}
@@ -1049,7 +1050,7 @@ function s20OpenPreview(){if(s20Url) window.open(s20Url,"_blank","noopener")}
 <script>
 const S21_ENDPOINT="https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/forge-notify";
 const S21_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlenlhb3lnaGt2dmRjaWF0bmN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc5Nzg1NzEsImV4cCI6MjEwMzU1NDU3MX0.3nuGvmi54v-SPsXlCB9keOSUzTfx8ShMXKtUxf70TrI";
-async function s21Call(payload,method="POST"){const r=await fetch(S21_ENDPOINT,{method,headers:{"Authorization":`Bearer ${S21_KEY}`,"apikey":S21_KEY,"Content-Type":"application/json"},body:method==="POST"?JSON.stringify(payload):undefined});const d=await r.json().catch(()=>({}));if(!r.ok||d.ok===false)throw new Error(d.error||`HTTP ${r.status}`);return d}
+async function s21Call(payload,method="POST"){const s=await s23Session();if(!s)throw new Error("No hay sesión Owner activa.");const r=await fetch(S21_ENDPOINT,{method,headers:{"Authorization":`Bearer ${s.access_token}`,"apikey":S21_KEY,"Content-Type":"application/json"},body:method==="POST"?JSON.stringify(payload):undefined});const d=await r.json().catch(()=>({}));if(!r.ok||d.ok===false)throw new Error(d.error||`HTTP ${r.status}`);return d}
 function s21Set(x){document.getElementById("s21Msg").textContent=x}
 async function s21Health(){try{const d=await s21Call(null,"GET");document.getElementById("s21Backend").textContent="ACTIVO";document.getElementById("s21Push").textContent=d.vapidConfigured?"LISTO":"PENDIENTE VAPID";s21Set(`Backend activo · ${d.subscriptions} suscripción(es) · costo $0.00`);}catch(e){s21Set("Error: "+e.message)}}
 async function s21Permission(){if(!("Notification" in window))return s21Set("Este navegador no expone Notification API.");const p=await Notification.requestPermission();s21Set("Permiso: "+p)}
@@ -1082,7 +1083,8 @@ const S22_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJl
 function s22Set(x){document.getElementById("s22Msg").textContent=x}
 function s22B64(s){const p="=".repeat((4-s.length%4)%4),b=(s+p).replace(/-/g,"+").replace(/_/g,"/"),raw=atob(b);return Uint8Array.from([...raw].map(c=>c.charCodeAt(0)))}
 async function s22Call(payload=null,method="GET"){
- const r=await fetch(S22_ENDPOINT,{method,headers:{"Authorization":`Bearer ${S22_KEY}`,"apikey":S22_KEY,"Content-Type":"application/json"},body:method==="POST"?JSON.stringify(payload):undefined});
+ const s=await s23Session(); if(!s) throw new Error("No hay sesión Owner activa.");
+ const r=await fetch(S22_ENDPOINT,{method,headers:{"Authorization":`Bearer ${s.access_token}`,"apikey":S22_KEY,"Content-Type":"application/json"},body:method==="POST"?JSON.stringify(payload):undefined});
  const d=await r.json().catch(()=>({})); if(!r.ok||d.ok===false) throw new Error(d.error||`HTTP ${r.status}`); return d;
 }
 async function s22Check(){
