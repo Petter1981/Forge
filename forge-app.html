@@ -2504,8 +2504,8 @@ document.addEventListener('DOMContentLoaded',()=>document.getElementById('s38Run
     <div class="backend-box" style="text-align:center"><b id="s39Worker">SOLO URL ⚠️</b><div class="connector-note">Worker compartido</div></div>
     <div class="backend-box" style="text-align:center"><b id="s39Cost">$0.00 ✅</b><div class="connector-note">API variable</div></div>
   </div>
-  <button id="s39Run" class="btn primary" style="width:100%" disabled="">Ejecutar Sprint 39</button>
-  <div id="s39Msg" class="backend-box" style="margin-top:12px">Publicando Sprint 39 al Preview HTTPS aislado…</div>
+  <button id="s39Run" class="btn primary" style="width:100%">Ejecutar Sprint 39</button>
+  <div id="s39Msg" class="backend-box" style="margin-top:12px">Listo para probar Push REAL en HTTPS.</div>
   <div id="s39Link" style="margin-top:10px"></div>
   <div id="s39Log"><div class="backend-box" style="margin-top: 7px;">✅ VAPID Public/Private generadas y guardadas cifradas en Supabase Vault; la clave privada no está en este HTML.</div><div class="backend-box" style="margin-top: 7px;">✅ Codex + voz ya comparten un único token cifrado; solo falta la URL del host durable.</div></div>
 </section>
@@ -2591,17 +2591,27 @@ async function s39Run(){
  const btn=document.getElementById('s39Run'),msg=document.getElementById('s39Msg'),log=document.getElementById('s39Log');
  btn.disabled=true;log.innerHTML='';
  try{
-  if(location.protocol==='https:'){
-    msg.textContent='Activando Web Push REAL en contexto HTTPS…'; await s39PushReal();
-    msg.textContent='✅ Sprint 39: Push firmado probado. $0 variable.';
-  }else{
-    msg.textContent='Publicando Sprint 39 al Preview HTTPS aislado…'; await s39PublishSelf();
-    msg.textContent='✅ Publicado. Abra el Preview HTTPS y pulse Ejecutar Sprint 39 una vez allí para conceder permiso y probar Push REAL.';
-  }
- }catch(e){msg.textContent='❌ Gate seguro: '+e.message;s39Line(e.message,false);}
- finally{btn.disabled=false;}
+  if(location.protocol!=='https:') throw new Error('Sprint 39 requiere el Preview HTTPS; no se autopublica desde un DOM en ejecución.');
+  msg.textContent='Activando Web Push REAL en contexto HTTPS…';
+  await s39PushReal();
+  msg.textContent='✅ Sprint 39: Push firmado probado. $0 variable.';
+ }catch(e){
+  msg.textContent='❌ Gate seguro: '+e.message;
+  s39Line(e.message,false);
+ }finally{
+  btn.disabled=false;
+ }
 }
-document.addEventListener('DOMContentLoaded',()=>document.getElementById('s39Run')?.addEventListener('click',e=>{e.preventDefault();s39Run();}));
+document.addEventListener('DOMContentLoaded',()=>{
+ const btn=document.getElementById('s39Run');
+ const msg=document.getElementById('s39Msg');
+ if(btn){
+   btn.disabled=false;
+   btn.textContent='Ejecutar Sprint 39';
+   btn.addEventListener('click',e=>{e.preventDefault();s39Run();});
+ }
+ if(msg && /Publicando Sprint 39/i.test(msg.textContent||'')) msg.textContent='Listo para probar Push REAL en HTTPS.';
+});
 </script>
 
 
