@@ -567,7 +567,7 @@ async function testPublisherBackend(){
 
 
 const FORGE_EDGE_URL = "https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/forge-publisher";
-const FORGE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlenlhb3lnaGt2dmRjaWF0bmN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc5Nzg1NzEsImV4cCI6MjEwMzU1NDU3MX0.3nuGvmi54v-SPsXlCB9keOSUzTfx8ShMXKtUxf70TrI";
+const FORGE_ANON_KEY = S23_KEY;
 
 async function realGithubWriteTest(){
   const state=document.getElementById('realWriteState');
@@ -588,7 +588,7 @@ async function realGithubWriteTest(){
     const r=await fetch(FORGE_EDGE_URL,{
       method:'POST',
       headers:{
-        'Authorization':'Bearer '+FORGE_ANON_KEY,
+        'Authorization':'Bearer '+((await s23Session())?.access_token||''),
         'apikey':FORGE_ANON_KEY,
         'Content-Type':'application/json'
       },
@@ -607,13 +607,15 @@ async function realGithubWriteTest(){
 
 
 const FORGE_RUNNER_URL="https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/forge-runner";
-const FORGE_RUNNER_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlenlhb3lnaGt2dmRjaWF0bmN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc5Nzg1NzEsImV4cCI6MjEwMzU1NDU3MX0.3nuGvmi54v-SPsXlCB9keOSUzTfx8ShMXKtUxf70TrI";
+const FORGE_RUNNER_KEY=S23_KEY;
 
 async function forgeRunner(payload){
+  const session=await s23Session();
+  if(!session?.access_token) throw new Error("No hay sesión Owner activa.");
   const r=await fetch(FORGE_RUNNER_URL,{
     method:'POST',
     headers:{
-      'Authorization':'Bearer '+FORGE_RUNNER_KEY,
+      'Authorization':'Bearer '+session.access_token,
       'apikey':FORGE_RUNNER_KEY,
       'Content-Type':'application/json'
     },
@@ -701,13 +703,15 @@ setInterval(async()=>{
 
 
 const FORGE_AI_URL="https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/forge-ai";
-const FORGE_AI_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlenlhb3lnaGt2dmRjaWF0bmN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc5Nzg1NzEsImV4cCI6MjEwMzU1NDU3MX0.3nuGvmi54v-SPsXlCB9keOSUzTfx8ShMXKtUxf70TrI";
+const FORGE_AI_KEY=S23_KEY;
 
 async function forgeAI(payload){
+  const session=await s23Session();
+  if(!session?.access_token) throw new Error("No hay sesión Owner activa.");
   const r=await fetch(FORGE_AI_URL,{
     method:'POST',
     headers:{
-      'Authorization':'Bearer '+FORGE_AI_KEY,
+      'Authorization':'Bearer '+session.access_token,
       'apikey':FORGE_AI_KEY,
       'Content-Type':'application/json'
     },
@@ -894,13 +898,15 @@ function showQAPolicy(){document.getElementById('qaLog').textContent='POLÍTICA 
 
 <script>
 const FORGE_SAFETY_ENDPOINT = "https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/forge-safety";
-const FORGE_SAFETY_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlenlhb3lnaGt2dmRjaWF0bmN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc5Nzg1NzEsImV4cCI6MjEwMzU1NDU3MX0.3nuGvmi54v-SPsXlCB9keOSUzTfx8ShMXKtUxf70TrI";
+const FORGE_SAFETY_KEY = S23_KEY;
 let s19CheckpointObj = null;
 let s19ChangeSet = null;
 
 async function s19Call(payload, method="POST") {
+  const session=await s23Session();
+  if(!session?.access_token) throw new Error("No hay sesión Owner activa.");
   const headers = {
-    "Authorization": `Bearer ${FORGE_SAFETY_KEY}`,
+    "Authorization": `Bearer ${session.access_token}`,
     "apikey": FORGE_SAFETY_KEY,
     "Content-Type": "application/json"
   };
@@ -1013,7 +1019,7 @@ async function s19Rollback() {
 
 <script>
 const S20_ENDPOINT="https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/forge-preview";
-const S20_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlenlhb3lnaGt2dmRjaWF0bmN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc5Nzg1NzEsImV4cCI6MjEwMzU1NDU3MX0.3nuGvmi54v-SPsXlCB9keOSUzTfx8ShMXKtUxf70TrI";
+const S20_KEY=S23_KEY;
 let s20Url="";
 async function s20Call(action){
  const s=await s23Session(); if(!s) throw new Error("No hay sesión Owner activa.");
@@ -1049,7 +1055,7 @@ function s20OpenPreview(){if(s20Url) window.open(s20Url,"_blank","noopener")}
 
 <script>
 const S21_ENDPOINT="https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/forge-notify";
-const S21_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlenlhb3lnaGt2dmRjaWF0bmN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc5Nzg1NzEsImV4cCI6MjEwMzU1NDU3MX0.3nuGvmi54v-SPsXlCB9keOSUzTfx8ShMXKtUxf70TrI";
+const S21_KEY=S23_KEY;
 async function s21Call(payload,method="POST"){const s=await s23Session();if(!s)throw new Error("No hay sesión Owner activa.");const r=await fetch(S21_ENDPOINT,{method,headers:{"Authorization":`Bearer ${s.access_token}`,"apikey":S21_KEY,"Content-Type":"application/json"},body:method==="POST"?JSON.stringify(payload):undefined});const d=await r.json().catch(()=>({}));if(!r.ok||d.ok===false)throw new Error(d.error||`HTTP ${r.status}`);return d}
 function s21Set(x){document.getElementById("s21Msg").textContent=x}
 async function s21Health(){try{const d=await s21Call(null,"GET");document.getElementById("s21Backend").textContent="ACTIVO";document.getElementById("s21Push").textContent=d.vapidConfigured?"LISTO":"PENDIENTE VAPID";s21Set(`Backend activo · ${d.subscriptions} suscripción(es) · costo $0.00`);}catch(e){s21Set("Error: "+e.message)}}
@@ -1079,7 +1085,7 @@ async function s21Queue(){try{const d=await s21Call({action:"queue",eventType:"v
 
 <script>
 const S22_ENDPOINT="https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/forge-notify";
-const S22_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlenlhb3lnaGt2dmRjaWF0bmN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc5Nzg1NzEsImV4cCI6MjEwMzU1NDU3MX0.3nuGvmi54v-SPsXlCB9keOSUzTfx8ShMXKtUxf70TrI";
+const S22_KEY=S23_KEY;
 function s22Set(x){document.getElementById("s22Msg").textContent=x}
 function s22B64(s){const p="=".repeat((4-s.length%4)%4),b=(s+p).replace(/-/g,"+").replace(/_/g,"/"),raw=atob(b);return Uint8Array.from([...raw].map(c=>c.charCodeAt(0)))}
 async function s22Call(payload=null,method="GET"){
@@ -1234,8 +1240,7 @@ async function s23SignOut(){
   s23Set("Sesión cerrada.");
 }
 
-s23Client.auth.onAuthStateChange(()=>setTimeout(s23Check,0));
-setTimeout(s23Check,250);
+// Restauración y cambios de sesión se gestionan en un único listener administrativo.
 </script>
 
 
@@ -1527,7 +1532,10 @@ window.addEventListener("load", async()=>{
   try{
     const {data}=await s23Client.auth.getSession();
     await forgeAdminAuthorize(data.session,false);
-    s23Client.auth.onAuthStateChange((_event,session)=>{ setTimeout(()=>forgeAdminAuthorize(session,false),0); });
+    if(!window.__forgeAuthListenerBound){
+      window.__forgeAuthListenerBound=true;
+      s23Client.auth.onAuthStateChange((_event,session)=>{ setTimeout(()=>forgeAdminAuthorize(session,false),0); });
+    }
   }catch(e){ forgeGate(true); forgeGateMsg("Login requerido."); }
 });
 </script>
