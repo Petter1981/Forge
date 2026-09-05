@@ -336,6 +336,7 @@ footer{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(580
 <footer><button class="btn" style="width:100%" onclick="tab('missions',document.querySelectorAll('.tab')[2])">＋ Nueva misión</button></footer>
 
 <script>
+const FORGE_PUBLIC_KEY="sb_publishable_sFBO4x6k0KhDdHUVPNdeAw_aUj6rhod";
 
 
 let recognition=null;
@@ -567,7 +568,7 @@ async function testPublisherBackend(){
 
 
 const FORGE_EDGE_URL = "https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/forge-publisher";
-const FORGE_ANON_KEY = S23_KEY;
+const FORGE_ANON_KEY = FORGE_PUBLIC_KEY;
 
 async function realGithubWriteTest(){
   const state=document.getElementById('realWriteState');
@@ -607,7 +608,7 @@ async function realGithubWriteTest(){
 
 
 const FORGE_RUNNER_URL="https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/forge-runner";
-const FORGE_RUNNER_KEY=S23_KEY;
+const FORGE_RUNNER_KEY=FORGE_PUBLIC_KEY;
 
 async function forgeRunner(payload){
   const session=await s23Session();
@@ -703,7 +704,7 @@ setInterval(async()=>{
 
 
 const FORGE_AI_URL="https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/forge-ai";
-const FORGE_AI_KEY=S23_KEY;
+const FORGE_AI_KEY=FORGE_PUBLIC_KEY;
 
 async function forgeAI(payload){
   const session=await s23Session();
@@ -898,7 +899,7 @@ function showQAPolicy(){document.getElementById('qaLog').textContent='POLÍTICA 
 
 <script>
 const FORGE_SAFETY_ENDPOINT = "https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/forge-safety";
-const FORGE_SAFETY_KEY = S23_KEY;
+const FORGE_SAFETY_KEY = FORGE_PUBLIC_KEY;
 let s19CheckpointObj = null;
 let s19ChangeSet = null;
 
@@ -1019,7 +1020,7 @@ async function s19Rollback() {
 
 <script>
 const S20_ENDPOINT="https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/forge-preview";
-const S20_KEY=S23_KEY;
+const S20_KEY=FORGE_PUBLIC_KEY;
 let s20Url="";
 async function s20Call(action){
  const s=await s23Session(); if(!s) throw new Error("No hay sesión Owner activa.");
@@ -1055,7 +1056,7 @@ function s20OpenPreview(){if(s20Url) window.open(s20Url,"_blank","noopener")}
 
 <script>
 const S21_ENDPOINT="https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/forge-notify";
-const S21_KEY=S23_KEY;
+const S21_KEY=FORGE_PUBLIC_KEY;
 async function s21Call(payload,method="POST"){const s=await s23Session();if(!s)throw new Error("No hay sesión Owner activa.");const r=await fetch(S21_ENDPOINT,{method,headers:{"Authorization":`Bearer ${s.access_token}`,"apikey":S21_KEY,"Content-Type":"application/json"},body:method==="POST"?JSON.stringify(payload):undefined});const d=await r.json().catch(()=>({}));if(!r.ok||d.ok===false)throw new Error(d.error||`HTTP ${r.status}`);return d}
 function s21Set(x){document.getElementById("s21Msg").textContent=x}
 async function s21Health(){try{const d=await s21Call(null,"GET");document.getElementById("s21Backend").textContent="ACTIVO";document.getElementById("s21Push").textContent=d.vapidConfigured?"LISTO":"PENDIENTE VAPID";s21Set(`Backend activo · ${d.subscriptions} suscripción(es) · costo $0.00`);}catch(e){s21Set("Error: "+e.message)}}
@@ -1085,7 +1086,7 @@ async function s21Queue(){try{const d=await s21Call({action:"queue",eventType:"v
 
 <script>
 const S22_ENDPOINT="https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/forge-notify";
-const S22_KEY=S23_KEY;
+const S22_KEY=FORGE_PUBLIC_KEY;
 function s22Set(x){document.getElementById("s22Msg").textContent=x}
 function s22B64(s){const p="=".repeat((4-s.length%4)%4),b=(s+p).replace(/-/g,"+").replace(/_/g,"/"),raw=atob(b);return Uint8Array.from([...raw].map(c=>c.charCodeAt(0)))}
 async function s22Call(payload=null,method="GET"){
@@ -1168,8 +1169,8 @@ async function s22TestLocal(){
 
 <script>
 const S23_URL="https://aezyaoyghkvvdciatnct.supabase.co";
-const S23_KEY="sb_publishable_sFBO4x6k0KhDdHUVPNdeAw_aUj6rhod";
-const s23Client=window.supabase.createClient(S23_URL,S23_KEY);
+
+const s23Client=window.supabase.createClient(S23_URL,FORGE_PUBLIC_KEY);
 const S23_AUTH=S23_URL+"/functions/v1/forge-auth";
 
 function s23Set(x){document.getElementById("s23Msg").textContent=x}
@@ -1186,7 +1187,7 @@ async function s23Call(action){
     method:"POST",
     headers:{
       "Authorization":`Bearer ${session.access_token}`,
-      "apikey":S23_KEY,
+      "apikey":FORGE_PUBLIC_KEY,
       "Content-Type":"application/json"
     },
     body:JSON.stringify({action})
@@ -1282,7 +1283,7 @@ Las operaciones con service-role, GitHub y futuras APIs siguen exclusivamente en
         if (token) {
           const headers = new Headers(init.headers || (typeof input !== "string" ? input.headers : undefined) || {});
           headers.set("Authorization", `Bearer ${token}`);
-          if (!headers.has("apikey")) headers.set("apikey", S23_KEY);
+          if (!headers.has("apikey")) headers.set("apikey", FORGE_PUBLIC_KEY);
           init = {...init, headers};
         }
       }
@@ -1306,7 +1307,7 @@ async function s24CheckAll(){
     for(const [name,slug] of endpoints){
       const r=await fetch(`https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/${slug}`,{
         method:"GET",
-        headers:{"Authorization":`Bearer ${token}`,"apikey":S23_KEY}
+        headers:{"Authorization":`Bearer ${token}`,"apikey":FORGE_PUBLIC_KEY}
       });
       const d=await r.json().catch(()=>({}));
       results.push({name,ok:r.ok&&d.ok!==false,status:r.status});
@@ -1425,7 +1426,7 @@ async function s26Prepare(){
       method:"POST",
       headers:{
         "Authorization":`Bearer ${session.access_token}`,
-        "apikey":S23_KEY,
+        "apikey":FORGE_PUBLIC_KEY,
         "Content-Type":"application/json"
       },
       body:JSON.stringify({
@@ -1454,7 +1455,7 @@ async function forgeAdminAuthorize(session, allowBootstrap=true){
   try{
     let r=await fetch("https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/forge-auth",{
       method:"POST",
-      headers:{"Authorization":`Bearer ${session.access_token}`,"apikey":S23_KEY,"Content-Type":"application/json"},
+      headers:{"Authorization":`Bearer ${session.access_token}`,"apikey":FORGE_PUBLIC_KEY,"Content-Type":"application/json"},
       body:JSON.stringify({action:"status"})
     });
     let d=await r.json().catch(()=>({}));
@@ -1466,7 +1467,7 @@ async function forgeAdminAuthorize(session, allowBootstrap=true){
       forgeGateMsg("Validando alta inicial segura del propietario…");
       r=await fetch("https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/forge-auth",{
         method:"POST",
-        headers:{"Authorization":`Bearer ${session.access_token}`,"apikey":S23_KEY,"Content-Type":"application/json"},
+        headers:{"Authorization":`Bearer ${session.access_token}`,"apikey":FORGE_PUBLIC_KEY,"Content-Type":"application/json"},
         body:JSON.stringify({action:"bootstrap_owner",setup_code:FORGE_BOOTSTRAP_CODE})
       });
       d=await r.json().catch(()=>({}));
@@ -1518,7 +1519,7 @@ async function s23ClaimOwner(){
   try{
     const r=await fetch(S23_AUTH_ENDPOINT,{
       method:"POST",
-      headers:{"Authorization":`Bearer ${session.access_token}`,"apikey":S23_KEY,"Content-Type":"application/json"},
+      headers:{"Authorization":`Bearer ${session.access_token}`,"apikey":FORGE_PUBLIC_KEY,"Content-Type":"application/json"},
       body:JSON.stringify({action:"bootstrap_owner",setup_code:FORGE_BOOTSTRAP_CODE})
     });
     const d=await r.json().catch(()=>({}));
@@ -1597,7 +1598,7 @@ async function s29Fetch(slug,token){
     method:"GET",
     headers:{
       "Authorization":`Bearer ${token}`,
-      "apikey":S23_KEY,
+      "apikey":FORGE_PUBLIC_KEY,
       "Accept":"application/json"
     }
   });
@@ -1671,7 +1672,7 @@ function s29Clear(){
 </section>
 <script>
 const S30_WORKFLOW="name: FORGE Pages Preview\\non:\\n  workflow_dispatch:\\n  push:\\n    branches:\\n      - 'forge/readiness-*'\\npermissions:\\n  contents: read\\n  pages: write\\n  id-token: write\\njobs:\\n  deploy:\\n    environment:\\n      name: github-pages\\n    runs-on: ubuntu-latest\\n    steps:\\n      - uses: actions/checkout@v4\\n      - uses: actions/configure-pages@v5\\n      - uses: actions/upload-pages-artifact@v3\\n        with:\\n          path: .\\n      - uses: actions/deploy-pages@v4";
-async function s30Prepare(){const m=document.getElementById("s30Msg"),o=document.getElementById("s30Result");o.innerHTML="";try{m.textContent="Validando owner y preparando rama aislada…";const s=await s23Session();if(!s)throw new Error("No hay sesión activa.");const a=await s23Call("status");if(!a?.authorized)throw new Error("Sesión no autorizada como owner.");const r=await fetch("https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/forge-readiness",{method:"POST",headers:{"Authorization":"Bearer "+s.access_token,"apikey":S23_KEY,"Content-Type":"application/json"},body:JSON.stringify({action:"prepare_preview",owner:"Petter1981",repo:"Forge",html:document.documentElement.outerHTML,workflow:S30_WORKFLOW})});const d=await r.json().catch(()=>({}));if(!r.ok||!d.ok)throw new Error(d.error||("HTTP "+r.status));document.getElementById("s30Branch").textContent="CREADA ✅";m.textContent="✅ Rama aislada preparada; main intacto.";o.innerHTML="<div style='padding:12px;border-radius:14px;background:var(--panel2)'><b>Rama:</b> <code>"+d.branch+"</code><br><b>Baseline main:</b> <code>"+(d.base_sha||"")+"</code><br><b>Archivos:</b> "+(d.files||[]).map(x=>x.path).join(", ")+"<br><b>Producción:</b> "+(d.protected_branch_untouched?"sin tocar ✅":"REVISAR")+"</div>";}catch(e){document.getElementById("s30Branch").textContent="FALLÓ";m.textContent="❌ "+e.message;}}
+async function s30Prepare(){const m=document.getElementById("s30Msg"),o=document.getElementById("s30Result");o.innerHTML="";try{m.textContent="Validando owner y preparando rama aislada…";const s=await s23Session();if(!s)throw new Error("No hay sesión activa.");const a=await s23Call("status");if(!a?.authorized)throw new Error("Sesión no autorizada como owner.");const r=await fetch("https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/forge-readiness",{method:"POST",headers:{"Authorization":"Bearer "+s.access_token,"apikey":FORGE_PUBLIC_KEY,"Content-Type":"application/json"},body:JSON.stringify({action:"prepare_preview",owner:"Petter1981",repo:"Forge",html:document.documentElement.outerHTML,workflow:S30_WORKFLOW})});const d=await r.json().catch(()=>({}));if(!r.ok||!d.ok)throw new Error(d.error||("HTTP "+r.status));document.getElementById("s30Branch").textContent="CREADA ✅";m.textContent="✅ Rama aislada preparada; main intacto.";o.innerHTML="<div style='padding:12px;border-radius:14px;background:var(--panel2)'><b>Rama:</b> <code>"+d.branch+"</code><br><b>Baseline main:</b> <code>"+(d.base_sha||"")+"</code><br><b>Archivos:</b> "+(d.files||[]).map(x=>x.path).join(", ")+"<br><b>Producción:</b> "+(d.protected_branch_untouched?"sin tocar ✅":"REVISAR")+"</div>";}catch(e){document.getElementById("s30Branch").textContent="FALLÓ";m.textContent="❌ "+e.message;}}
 </script>
 
 <section id="forge-s31" style="margin:18px auto;max-width:1100px;padding:18px;border:1px solid rgba(128,128,128,.35);border-radius:18px;background:rgba(127,127,127,.08)">
@@ -1691,7 +1692,7 @@ async function s30Prepare(){const m=document.getElementById("s30Msg"),o=document
 function s31Line(t,ok=true){document.getElementById("s31Log").innerHTML+=`<div style="padding:9px 11px;margin-top:7px;border-radius:12px;background:var(--panel2)">${ok?"✅":"⚠️"} ${t}</div>`}
 async function s31Preview(action){
  const s=await s23Session(); if(!s) throw new Error("No hay sesión activa.");
- const r=await fetch("https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/forge-preview",{method:"POST",headers:{"Authorization":"Bearer "+s.access_token,"apikey":S23_KEY,"Content-Type":"application/json"},body:JSON.stringify({action,owner:"Petter1981",repo:"Forge"})});
+ const r=await fetch("https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/forge-preview",{method:"POST",headers:{"Authorization":"Bearer "+s.access_token,"apikey":FORGE_PUBLIC_KEY,"Content-Type":"application/json"},body:JSON.stringify({action,owner:"Petter1981",repo:"Forge"})});
  const d=await r.json().catch(()=>({})); return {ok:r.ok&&d.ok!==false,http:r.status,data:d};
 }
 async function s31Repair(){
@@ -1790,7 +1791,7 @@ async function s32Edge(slug,payload){
     method:"POST",
     headers:{
       "Authorization":"Bearer "+s.access_token,
-      "apikey":S23_KEY,
+      "apikey":FORGE_PUBLIC_KEY,
       "Content-Type":"application/json"
     },
     body:JSON.stringify(payload)
@@ -1985,7 +1986,7 @@ async function s33Edge(slug,payload){
     method:"POST",
     headers:{
       "Authorization":"Bearer "+s.access_token,
-      "apikey":S23_KEY,
+      "apikey":FORGE_PUBLIC_KEY,
       "Content-Type":"application/json"
     },
     body:JSON.stringify(payload)
@@ -2152,7 +2153,7 @@ async function s34Preview(action,extra={}){
   if(!s) throw new Error("No hay sesión activa.");
   const r=await fetch("https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/forge-preview",{
     method:"POST",
-    headers:{"Authorization":"Bearer "+s.access_token,"apikey":S23_KEY,"Content-Type":"application/json"},
+    headers:{"Authorization":"Bearer "+s.access_token,"apikey":FORGE_PUBLIC_KEY,"Content-Type":"application/json"},
     body:JSON.stringify({action,owner:"Petter1981",repo:"Forge",...extra})
   });
   const d=await r.json().catch(()=>({}));
@@ -2251,7 +2252,7 @@ const s35Sleep=ms=>new Promise(r=>setTimeout(r,ms));
 function s35Line(t,ok=true){const d=document.createElement('div');d.className='backend-box';d.style.marginTop='7px';d.textContent=(ok?'✅ ':'⚠️ ')+t;document.getElementById('s35Log').appendChild(d);}
 async function s35Call(slug,payload=null,method='POST'){
   const s=await s23Session(); if(!s) throw new Error('No hay sesión Owner activa.');
-  const opt={method,headers:{'Authorization':'Bearer '+s.access_token,'apikey':S23_KEY,'Content-Type':'application/json'}};
+  const opt={method,headers:{'Authorization':'Bearer '+s.access_token,'apikey':FORGE_PUBLIC_KEY,'Content-Type':'application/json'}};
   if(payload!==null) opt.body=JSON.stringify(payload);
   const r=await fetch(S35_BASE+slug,opt); const d=await r.json().catch(()=>({}));
   if(!r.ok||d.ok===false) throw new Error(d.error||('HTTP '+r.status)); return d;
@@ -2328,7 +2329,7 @@ const S36_BASE="https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/";
 function s36Line(t,ok=true){const d=document.createElement('div');d.className='backend-box';d.style.marginTop='7px';d.textContent=(ok?'✅ ':'⚠️ ')+t;document.getElementById('s36Log').appendChild(d);}
 async function s36Call(slug,payload=null,method='POST'){
   const s=await s23Session(); if(!s) throw new Error('No hay sesión Owner activa.');
-  const opt={method,headers:{'Authorization':'Bearer '+s.access_token,'apikey':S23_KEY,'Content-Type':'application/json'}};
+  const opt={method,headers:{'Authorization':'Bearer '+s.access_token,'apikey':FORGE_PUBLIC_KEY,'Content-Type':'application/json'}};
   if(payload!==null) opt.body=JSON.stringify(payload);
   const r=await fetch(S36_BASE+slug,opt); const d=await r.json().catch(()=>({}));
   if(!r.ok||d.ok===false) throw new Error(d.error||('HTTP '+r.status));
@@ -2417,7 +2418,7 @@ const S37_BASE="https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/";
 function s37Line(t,ok=true){const d=document.createElement('div');d.className='backend-box';d.style.marginTop='7px';d.textContent=(ok?'✅ ':'⚠️ ')+t;document.getElementById('s37Log').appendChild(d);}
 async function s37Call(slug,payload=null,method='POST'){
  const s=await s23Session(); if(!s) throw new Error('No hay sesión Owner activa.');
- const opt={method,headers:{'Authorization':'Bearer '+s.access_token,'apikey':S23_KEY,'Content-Type':'application/json'}};
+ const opt={method,headers:{'Authorization':'Bearer '+s.access_token,'apikey':FORGE_PUBLIC_KEY,'Content-Type':'application/json'}};
  if(payload!==null)opt.body=JSON.stringify(payload);
  const r=await fetch(S37_BASE+slug,opt); const d=await r.json().catch(()=>({}));
  if(!r.ok||d.ok===false)throw new Error(d.error||('HTTP '+r.status)); return d;
@@ -2469,7 +2470,7 @@ const S38_BASE="https://aezyaoyghkvvdciatnct.supabase.co/functions/v1/";
 function s38Line(t,ok=true){const d=document.createElement('div');d.className='backend-box';d.style.marginTop='7px';d.textContent=(ok?'✅ ':'⚠️ ')+t;document.getElementById('s38Log').appendChild(d);}
 async function s38Call(slug,payload=null,method='POST'){
  const s=await s23Session(); if(!s) throw new Error('No hay sesión Owner activa.');
- const opt={method,headers:{Authorization:'Bearer '+s.access_token,apikey:S23_KEY,'Content-Type':'application/json'}};
+ const opt={method,headers:{Authorization:'Bearer '+s.access_token,apikey:FORGE_PUBLIC_KEY,'Content-Type':'application/json'}};
  if(payload!==null)opt.body=JSON.stringify(payload);
  const r=await fetch(S38_BASE+slug,opt);const d=await r.json().catch(()=>({}));
  if(!r.ok||d.ok===false)throw new Error(d.error||('HTTP '+r.status));return d;
@@ -2549,7 +2550,7 @@ self.addEventListener('notificationclick', event => {
 function s39Line(t,ok=true){const d=document.createElement('div');d.className='backend-box';d.style.marginTop='7px';d.textContent=(ok?'✅ ':'⚠️ ')+t;document.getElementById('s39Log').appendChild(d);}
 async function s39Session(){const s=await s23Session(); if(!s) throw new Error('No hay sesión Owner activa.'); return s;}
 async function s39Call(slug,payload=null,method='POST'){
- const s=await s39Session(); const opt={method,headers:{Authorization:'Bearer '+s.access_token,apikey:S23_KEY,'Content-Type':'application/json'}};
+ const s=await s39Session(); const opt={method,headers:{Authorization:'Bearer '+s.access_token,apikey:FORGE_PUBLIC_KEY,'Content-Type':'application/json'}};
  if(payload!==null) opt.body=JSON.stringify(payload);
  const r=await fetch(S39_BASE+slug,opt); const d=await r.json().catch(()=>({}));
  if(!r.ok||d.ok===false) throw new Error(d.error||('HTTP '+r.status)); return d;
